@@ -1,108 +1,322 @@
-jQuery(function ($) {
-    'use strict';
+/* JS Document */
 
-    var form = $('.contact-form');
-    form.submit(function () {
-        var $this = $(this);
-        $.post("sendemail.php", $(".contact-form").serialize(), function (result) {
-            if (result.type == 'success') {
-                $this.prev().text(result.message).fadeIn().delay(3000).fadeOut();
-            }
-        });
-        return false;
-    });
+/******************************
 
-});
+[Table of Contents]
 
-// Google Map Customization
-(function () {
+1. Vars and Inits
+2. Set Header
+3. Init Search
+4. Init Menu
+5. Init Google Map
 
-    var map;
 
-    map = new GMaps({
-        el: '#gmap',
-        lat: 43.1580159,
-        lng: -77.6030777,
-        scrollwheel: false,
-        zoom: 14,
-        zoomControl: false,
-        panControl: false,
-        streetViewControl: false,
-        mapTypeControl: false,
-        overviewMapControl: false,
-        clickable: false
-    });
+******************************/
 
-    var image = 'images/map-icon.png';
-    map.addMarker({
-        lat: 43.1580159,
-        lng: -77.6030777,
-        //icon: image,
-        animation: google.maps.Animation.DROP,
-        verticalAlign: 'bottom',
-        horizontalAlign: 'center',
-        backgroundColor: '#ffffff',
-    });
+$(document).ready(function()
+{
+	"use strict";
 
-    var styles = [
+	/* 
 
-        {
-            "featureType": "road",
-            "stylers": [
-                {
-                    "color": ""
-                }
-		]
-	}, {
-            "featureType": "water",
-            "stylers": [
-                {
-                    "color": "#A2DAF2"
-                }
-		]
-	}, {
-            "featureType": "landscape",
-            "stylers": [
-                {
-                    "color": "#ABCE83"
-                }
-		]
-	}, {
-            "elementType": "labels.text.fill",
-            "stylers": [
-                {
-                    "color": "#000000"
-                }
-		]
-	}, {
-            "featureType": "poi",
-            "stylers": [
-                {
-                    "color": "#2ECC71"
-                }
-		]
-	}, {
-            "elementType": "labels.text",
-            "stylers": [
-                {
-                    "saturation": 1
-                },
-                {
-                    "weight": 0.1
-                },
-                {
-                    "color": "#111111"
-                }
-		]
+	1. Vars and Inits
+
+	*/
+
+	var header = $('.header');
+	var hambActive = false;
+	var menuActive = false;
+	var map;
+
+	setHeader();
+
+	$(window).on('resize', function()
+	{
+		setHeader();
+	});
+
+	$(document).on('scroll', function()
+	{
+		setHeader();
+	});
+
+	initSearch();
+	initMenu();
+	initGoogleMap();
+
+	/* 
+
+	2. Set Header
+
+	*/
+
+	function setHeader()
+	{
+		if($(window).scrollTop() > 100)
+		{
+			header.addClass('scrolled');
+		}
+		else
+		{
+			header.removeClass('scrolled');
+		}
 	}
 
-	];
+	/* 
 
-    map.addStyle({
-        styledMapName: "Styled Map",
-        styles: styles,
-        mapTypeId: "map_style"
-    });
+	3. Init Search
 
-    map.setStyle("map_style");
-}());
+	*/
+
+	function initSearch()
+	{
+		if($('.search').length && $('.search_panel').length)
+		{
+			var search = $('.search');
+			var panel = $('.search_panel');
+
+			search.on('click', function()
+			{
+				panel.toggleClass('active');
+			});
+		}
+	}
+
+	/* 
+
+	4. Init Menu
+
+	*/
+
+	function initMenu()
+	{
+		if($('.hamburger').length)
+		{
+			var hamb = $('.hamburger');
+
+			hamb.on('click', function(event)
+			{
+				event.stopPropagation();
+
+				if(!menuActive)
+				{
+					openMenu();
+					
+					$(document).one('click', function cls(e)
+					{
+						if($(e.target).hasClass('menu_mm'))
+						{
+							alert();
+							$(document).one('click', cls);
+						}
+						else
+						{
+							closeMenu();
+						}
+					});
+				}
+				else
+				{
+					$('.menu').removeClass('active');
+					menuActive = false;
+				}
+			});
+
+			//Handle page menu
+			if($('.page_menu_item').length)
+			{
+				var items = $('.page_menu_item');
+				items.each(function()
+				{
+					var item = $(this);
+
+					item.on('click', function(evt)
+					{
+						if(item.hasClass('has-children'))
+						{
+							evt.preventDefault();
+							evt.stopPropagation();
+							var subItem = item.find('> ul');
+						    if(subItem.hasClass('active'))
+						    {
+						    	subItem.toggleClass('active');
+								TweenMax.to(subItem, 0.3, {height:0});
+						    }
+						    else
+						    {
+						    	subItem.toggleClass('active');
+						    	TweenMax.set(subItem, {height:"auto"});
+								TweenMax.from(subItem, 0.3, {height:0});
+						    }
+						}
+						else
+						{
+							evt.stopPropagation();
+						}
+					});
+				});
+			}
+		}
+	}
+
+	function openMenu()
+	{
+		var fs = $('.menu');
+		fs.addClass('active');
+		hambActive = true;
+		menuActive = true;
+	}
+
+	function closeMenu()
+	{
+		var fs = $('.menu');
+		fs.removeClass('active');
+		hambActive = false;
+		menuActive = false;
+	}
+
+	/* 
+
+	5. Init Google Map
+
+	*/
+
+	function initGoogleMap()
+	{
+		var myLatlng = new google.maps.LatLng(34.043238,-118.258338);
+    	var mapOptions = 
+    	{
+    		center: myLatlng,
+	       	zoom: 13,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			draggable: true,
+			scrollwheel: false,
+			zoomControl: true,
+			zoomControlOptions:
+			{
+				position: google.maps.ControlPosition.RIGHT_CENTER
+			},
+			mapTypeControl: false,
+			scaleControl: false,
+			streetViewControl: false,
+			rotateControl: false,
+			fullscreenControl: true,
+			styles:
+			[
+			  {
+			    "featureType": "landscape",
+			    "elementType": "geometry.fill",
+			    "stylers": [
+			      {
+			        "color": "#e9e5dc"
+			      }
+			    ]
+			  },
+			  {
+			    "featureType": "poi",
+			    "elementType": "labels",
+			    "stylers": [
+			      {
+			        "visibility": "off"
+			      }
+			    ]
+			  },
+			  {
+			    "featureType": "road",
+			    "elementType": "labels.icon",
+			    "stylers": [
+			      {
+			        "visibility": "off"
+			      }
+			    ]
+			  },
+			  {
+			    "featureType": "road.arterial",
+			    "elementType": "geometry",
+			    "stylers": [
+			      {
+			        "weight": 1.5
+			      }
+			    ]
+			  },
+			  {
+			    "featureType": "road.arterial",
+			    "elementType": "geometry.fill",
+			    "stylers": [
+			      {
+			        "weight": 1
+			      }
+			    ]
+			  },
+			  {
+			    "featureType": "road.highway",
+			    "elementType": "geometry.fill",
+			    "stylers": [
+			      {
+			        "color": "#fa9e25"
+			      }
+			    ]
+			  },
+			  {
+			    "featureType": "road.highway",
+			    "elementType": "geometry.stroke",
+			    "stylers": [
+			      {
+			        "color": "#e49307"
+			      }
+			    ]
+			  },
+			  {
+			    "featureType": "road.highway",
+			    "elementType": "labels",
+			    "stylers": [
+			      {
+			        "visibility": "off"
+			      }
+			    ]
+			  },
+			  {
+			    "featureType": "road.local",
+			    "elementType": "geometry",
+			    "stylers": [
+			      {
+			        "weight": 0.5
+			      }
+			    ]
+			  },
+			  {
+			    "featureType": "road.local",
+			    "elementType": "geometry.fill",
+			    "stylers": [
+			      {
+			        "color": "#d9d4ca"
+			      }
+			    ]
+			  },
+			  {
+			    "featureType": "transit",
+			    "elementType": "labels",
+			    "stylers": [
+			      {
+			        "visibility": "off"
+			      }
+			    ]
+			  }
+			]
+    	}
+
+    	// Initialize a map with options
+    	map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+		// Re-center map after window resize
+		google.maps.event.addDomListener(window, 'resize', function()
+		{
+			setTimeout(function()
+			{
+				google.maps.event.trigger(map, "resize");
+				map.setCenter(myLatlng);
+			}, 1400);
+		});
+	}
+
+});
