@@ -19,6 +19,8 @@
     <!-- iCheck -->
     <link href="/assets/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="/assets/vendors/dropzone/dist/dropzone.css">
+
     <!-- Custom Theme Style -->
     <link href="/assets/build/css/custom.min.css" rel="stylesheet">
 </head>
@@ -50,23 +52,19 @@
                         <div class="menu_section active">
                             <h3>General</h3>
                             <ul class="nav side-menu">
-                                <li class="active-on-hover"><a
-                                        href="/admin/listproducts"><i class="fa fa-edit"></i>
+                                <li class="active-on-hover"><a href="/admin/listproducts"><i class="fa fa-edit"></i>
                                         Products </a></li>
-                                <li class="active-on-hover"><a
-                                        href="/admin/listcategories"><i class="fa fa-edit"></i>
+                                <li class="active-on-hover"><a href="/admin/listcategories"><i class="fa fa-edit"></i>
                                         Products Category </a>
                                 </li>
-                                <li class="active-on-hover"><a
-                                        href="/admin/listmanufacturers"><i class="fa fa-edit"></i>
+                                <li class="active-on-hover"><a href="/admin/listmanufacturers"><i
+                                            class="fa fa-edit"></i>
                                         Products Manufacturer
                                     </a></li>
-                                <li class="active-on-hover"><a
-                                        href="/admin/listorders"><i class="fa fa-edit"></i>
+                                <li class="active-on-hover"><a href="/admin/listorders"><i class="fa fa-edit"></i>
                                         Orders
                                     </a></li>
-                                <li class="active-on-hover"><a
-                                        href="/admin/listcustomers"><i class="fa fa-edit"></i>
+                                <li class="active-on-hover"><a href="/admin/listcustomers"><i class="fa fa-edit"></i>
                                         Customers </a></li>
                             </ul>
                         </div>
@@ -107,13 +105,31 @@
             <!-- /top navigation -->
 
             <!-- page content -->
-            <div class="right_col" role="main">
+            <div class="right_col" role="main" style="min-height: 3940px;">
                 <div class="">
+                    <div class="page-title">
+                        <div class="title_left">
+                            <h3>Admin form</h3>
+                        </div>
+                    </div>
                     <div class="clearfix"></div>
-
-                    <div class="row" style="display: block;">
-                        <h1 style="text-align: center;">ADMIN HOMEPAGE</h1>
-                        <div class="lottie-container" style="height: 500px; margin-top: 20px;"></div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 ">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Add new product form (thêm hình ảnh sản phẩm)</h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br>
+                                    <form class="form-horizontal form-label-left dropzone dz-clickable needsclick" action="/admin/addproductimages" method="POST">
+                                        <div class="dz-message needsclick">
+                                            <button class="dz-button" type="button">Drop file here or click to upload</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -140,16 +156,9 @@
 
     <!-- Custom Theme Scripts -->
     <script src="/assets/build/js/custom.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.6.10/lottie.min.js"></script>
+    <script src="/assets/vendors/dropzone/dist/dropzone.js"></script>
     <script>
         $(document).ready(function () {
-            lottie.loadAnimation({
-                container: document.querySelector('div.lottie-container'),
-                path: '/assets/vendors/data.json',
-                renderer: 'svg',
-                loop: true,
-                autoplay: true,
-            });
             $('.active-on-hover').hover(function () {
                 $(this).addClass('current-page');
             }, function () {
