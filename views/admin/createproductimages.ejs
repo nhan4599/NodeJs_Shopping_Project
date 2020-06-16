@@ -122,11 +122,23 @@
                                 </div>
                                 <div class="x_content">
                                     <br>
-                                    <form class="form-horizontal form-label-left dropzone dz-clickable needsclick" action="/admin/addproductimages" method="POST">
-                                        <div class="dz-message needsclick">
-                                            <button class="dz-button" type="button">Drop file here or click to upload</button>
+                                    <form class="form-horizontal form-label-left dropzone dz-clickable needsclick"
+                                        action="/admin/addimages" method="POST" id="frmTemp">
+                                        <div class="item form-group dz-message needsclick">
+                                            <button class="dz-button" type="button">Drop file here or click to
+                                                upload</button>
                                         </div>
                                     </form>
+                                    <form action="/admin/createproduct" id="frmFinal"
+                                        style="visibility: hidden; width: 0px; height: 0px; position: absolute; top: 0px; left: 0px;"
+                                        method="POST">
+                                    </form>
+                                    <div class="row" style="margin-top: 10px;">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-success" href="#" id="btnSave">Create</a>
+                                            <a class="btn btn-primary pull-right" href="#">Back</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -158,11 +170,55 @@
     <script src="/assets/build/js/custom.min.js"></script>
     <script src="/assets/vendors/dropzone/dist/dropzone.js"></script>
     <script>
+        // var myDropzone = new Dropzone('div#myDropzone', {url: '/admin/createproduct'});
+        // if (!document.getElementById('DropzoneElementId')) {
+        //     var myDropzone = new Dropzone("div#DropzoneElementId", { url: "/file/post" });
+        //     // other code here
+        // }
+        // console.log(document.getElementById('DropzoneElementId'));
+        // $('#frmForm').dropzone({ url: '/admin/createproducts' });
+        // my-awesome-dropzone
+        // Dropzone.options.myAwesomeDropzone = {
+        //     url: '/admin/createproduct',
+        //     addRemoveLinks: true
+        // }
+        Dropzone.autoDiscover = false;
+        Dropzone.options.frmTemp = {
+            init: function () {
+                this.on('removedfile', function (file) {
+                    $.ajax({
+                        url: '/admin/removeimages',
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ filename: file.name })
+                    });
+                });
+            }
+        };
+        var myDropzone = new Dropzone('#frmTemp', {
+            url: '/admin/addimages',
+            paramName: 'file',
+            addRemoveLinks: true,
+            parallelUploads: 1,
+            maxFilesize: 0.25
+        });
         $(document).ready(function () {
             $('.active-on-hover').hover(function () {
                 $(this).addClass('current-page');
             }, function () {
                 $(this).removeClass('current-page');
+            });
+
+            // $('.dz-hidden-input').attr('name', 'pic');
+            // var data = new FormData();
+            // var count = 1;
+            // for (var file of myDropzone.files)
+            // {
+            //     data.append(`file${count++}`, file);
+            // }
+            $('#btnSave').click(function () {
+                $('#frmFinal').submit();
             });
         });
     </script>

@@ -115,88 +115,94 @@
                         <div class="col-md-12 col-sm-12 ">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Add new product form</h2>
+                                    <h2>Add new product form (cấu hình của sản phẩm)</h2>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
                                     <br>
-                                    <form class="form-horizontal form-label-left" action="/admin/addproductmetadata" method="POST">
+                                    <form class="form-horizontal form-label-left" action="/admin/addproductimages" method="POST">
                                         <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Tên sản phẩm
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 ">
-                                                <input type="text" required="required" name="name"
-                                                    class="form-control ">
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Số lượng nhập
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 ">
-                                                <input type="number" name="inventory" required="required"
-                                                    class="form-control" value="1">
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Giá
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Dung lượng RAM
                                             </label>
                                             <div class="input-group col-md-6">
-                                                <input type="text" class="form-control" placeholder="giá sản phẩm"
-                                                    name="price">
+                                                <input type="text" class="form-control" placeholder="RAM"
+                                                    name="ram" value="<%= item.config.RAM %>">
                                                 <div class="input-group-append">
-                                                    <span class="input-group-text">VNĐ</span>
+                                                    <span class="input-group-text">Gb</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Loại sản
-                                                phẩm</label>
-                                            <div class="col-md-6 col-sm-6">
-                                                <select class="form-control" name="category">
-                                                    <% for (var item of categories) { %>
-                                                    <option value="<%= item.cateId %>"><%= item.cateName %></option>
-                                                    <% } %>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Trạng thái sản
-                                                phẩm</label>
-                                            <div class="col-md-6 col-sm-6">
-                                                <select class="form-control" name="state">
-                                                    <% for (var item of staties) { %>
-                                                    <option value="<%= item.stateId %>"><%= item.stateName %></option>
-                                                    <% } %>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Phân
-                                                khúc</label>
-                                            <div class="col-md-6 col-sm-6">
-                                                <select class="form-control" name="segment">
-                                                    <% for (var item of segments) { %>
-                                                    <option value="<%= item.segmentId %>"><%= item.segmentName %>
-                                                    </option>
-                                                    <% } %>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Hãng sản
-                                                xuất</label>
-                                            <div class="col-md-6 col-sm-6">
-                                                <select class="form-control" id="exampleFormControlSelect1" name="manu">
-                                                    <% for (var item of manufacturers) { %>
-                                                    <option value="<%= item.manuId %>"><%= item.manuName %></option>
-                                                    <% } %>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Hình ảnh
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Màn hình
                                             </label>
-                                            <div class="col-md-6 col-sm-6 dropzone-previews" id="preview">
+                                            <div class="col-md-6 col-sm-6 ">
+                                                <input type="text" name="screen" required="required" value="<%= item.config.screen %>"
+                                                    class="form-control" placeholder="màn hình">
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Camera sau
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 ">
+                                                <input type="text" name="rearCam" required="required" value="<%= item.config.rearCamera %>"
+                                                    class="form-control" placeholder="camera sau">
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Camera trước
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 ">
+                                                <input type="text" name="frontCam" required="required" value="<%= item.config.frontCamera %>"
+                                                    class="form-control" placeholder="camera trước">
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Hệ điều hành
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 ">
+                                                <input type="text" name="os" required="required" value="<%= item.config.OS %>"
+                                                    class="form-control" placeholder="Hệ điều hành">
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Bộ nhớ trong
+                                            </label>
+                                            <div class="input-group col-md-6">
+                                                <input type="text" class="form-control" placeholder="bộ nhớ trong" value="<%= item.config.storage %>"
+                                                    name="storage">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">Gb</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Loại thẻ nhớ
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 ">
+                                                <input type="text" name="sdType" required="required" value="<%= item.config.SDtype %>"
+                                                    class="form-control" placeholder="loại thẻ nhớ">
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Dung lượng thẻ nhớ tối đa
+                                            </label>
+                                            <div class="input-group col-md-6">
+                                                <input type="text" class="form-control" placeholder="Dung lượng thẻ nhớ tối đa"
+                                                    name="sdSize" value="<%= item.config.maxSDsize %>">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">Gb</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Dung lượng pin
+                                            </label>
+                                            <div class="input-group col-md-6">
+                                                <input type="text" class="form-control" placeholder="Dung lượng pin"
+                                                    name="pin" value="<%= item.config.batery %>">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">mAh</span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="ln_solid"></div>

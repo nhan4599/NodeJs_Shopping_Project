@@ -100,81 +100,74 @@
 
             <!-- page content -->
             <div class="right_col" role="main">
-                <div class="">
-                    <div class="clearfix"></div>
-
-                    <div class="row" style="display: block;">
-                        <div class="clearfix"></div>
-                        <div class="col-md-12 col-sm-12  ">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>Products list</h2>
-                                    <a class="btn btn-primary pull-right" style="color: #E7E7E7;" href="/admin/createproduct">Add new product</a>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped jambo_table bulk_action">
-                                            <thead>
-                                                <tr class="headings">
-                                                    <th>
-                                                        <input type="checkbox" id="check-all" class="flat">
-                                                    </th>
-                                                    <th class="column-title">Name </th>
-                                                    <th class="column-title">Image </th>
-                                                    <th class="column-title">Inventory </th>
-                                                    <th class="column-title">Price </th>
-                                                    <th class="column-title">Category </th>
-                                                    <th class="column-title">Segment </th>
-                                                    <th class="column-title">Manufacturer </th>
-                                                    <th class="column-title">Status </th>
-                                                    <th class="column-title no-link last"><span
-                                                            class="nobr">Action</span>
-                                                    </th>
-                                                    <th class="bulk-actions" colspan="7">
-                                                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk
-                                                            Actions ( <span class="action-cnt"> </span> ) <i
-                                                                class="fa fa-chevron-down"></i></a>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <% for (var i = 0; i < products.length; i++) { %>
-                                                    <tr class="even pointer">
-                                                        <td class="a-center ">
-                                                            <input type="checkbox" class="flat" name="table_records">
-                                                        </td>
-                                                        <td><%= products[i].productName %></td>
-                                                        <td>
-                                                            <img src="data:image/png;base64,<%= images[i] %>" alt="Error!" width="150px">
-                                                        </td>
-                                                        <td><%= products[i].inventory %></td>
-                                                        <td><%= products[i].price %></td>
-                                                        <td><%= products[i].cateName %></td>
-                                                        <td class="a-right"><%= products[i].segmentName %></td>
-                                                        <td class="a-right"><%= products[i].manuName %></td>
-                                                        <td class="a-right"><%= products[i].stateName %></td>
-                                                        <td class="last">
-                                                            <a href="/admin/productdetail/<%= products[i].productId %>">View</a>
-                                                        </td>
-                                                    </tr>
-                                                <% } %>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row">
-                                    <ul class="pagination mx-auto">
-                                        <li class="active page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                <div class="row" style="display: block; height: 500px;">
+                    <div class="col-md-4" style="background: white; height: 602px;">
+                        <% for (var i in item.images) { %>
+                            <img src="data:image/png;base64,<%= item.images[i].imgBase64 %>" alt="Error!" width="100%"/>
+                        <% } %>
+                    </div>
+                    <div class="col-md-3 product-info" style="background: white; height: 602px; border-left: 2px solid #0069D9;">
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Name: </p>
+                            <p style="margin-bottom: 0px" class="pull-right"><%= item.productName %></p>
                         </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Inventory: </p>
+                            <p style="margin-bottom: 0px;" class="pull-right"><%= item.inventory %></p>
+                        </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Price: </p>
+                            <p style="margin-bottom: 0px;" class="pull-right"><%= item.price %></p>
+                        </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Category: </p>
+                            <p style="margin-bottom: 0px;" class="pull-right"><%= item.cateName %></p>
+                        </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">State: </p>
+                            <p style="margin-bottom: 0px;" class="pull-right"><%= item.stateName %></p>
+                        </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Segment: </p>
+                            <p style="margin-bottom: 0px;" class="pull-right"><%= item.segmentName %></p>
+                        </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Manufacturer: </p>
+                            <p style="margin-bottom: 0px;" class="pull-right"><%= item.manuName %></p>
+                        </div>
+                    </div>
+                    <div class="col-md-5 product-info" style="background: white; height: 602px; border-left: 2px solid #0069D9;">
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Ram: </p>
+                            <p style="margin-bottom: 0px" class="pull-right"><%= item.config.RAM %></p>
+                        </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Screen: </p>
+                            <p style="margin-bottom: 0px" class="pull-right"><%= item.config.screen %></p>
+                        </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Camera: </p>
+                            <p style="margin-bottom: 0px" class="pull-right">Rear: <%= item.config.rearCamera %>, Front: <%= item.config.frontCamera %></p>
+                        </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Operating System: </p>
+                            <p style="margin-bottom: 0px" class="pull-right"><%= item.config.OS %></p>
+                        </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Storage: </p>
+                            <p style="margin-bottom: 0px" class="pull-right"><%= item.config.storage %></p>
+                        </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">SD: </p>
+                            <p style="margin-bottom: 0px" class="pull-right"><%= item.config.SDtype %>, max support: <%= item.config.maxSDsize %></p>
+                        </div>
+                        <div class="grid-item">
+                            <p style="font-weight: bolder; margin-bottom: 0px;">Batery: </p>
+                            <p style="margin-bottom: 0px" class="pull-right"><%= item.config.batery %></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12" style="text-align: center; margin-top: 8px;">
+                        <a href="/admin/editproduct/<%= item.productId %>" class="btn btn-primary" style="width: 100%;">Edit</a>
                     </div>
                 </div>
             </div>
@@ -209,6 +202,13 @@
             if (!$(this).hasClass('actual'))
                 $(this).removeClass('current-page');
         });
+
+        $('.product-info').css({
+            'display': 'grid',
+            'align-items': 'center'
+        });
+        $('.grid-item').css({'margin-bottom': 0 });
+        $('p').css('display', 'inline');
     </script>
 </body>
 

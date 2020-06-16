@@ -126,7 +126,7 @@
                                             </label>
                                             <div class="col-md-6 col-sm-6 ">
                                                 <input type="text" required="required" name="name"
-                                                    class="form-control ">
+                                                    class="form-control" value="<%= item.productName %>">
                                             </div>
                                         </div>
                                         <div class="item form-group">
@@ -134,7 +134,7 @@
                                             </label>
                                             <div class="col-md-6 col-sm-6 ">
                                                 <input type="number" name="inventory" required="required"
-                                                    class="form-control" value="1">
+                                                    class="form-control" value="<%= item.inventory %>">
                                             </div>
                                         </div>
                                         <div class="item form-group">
@@ -142,7 +142,7 @@
                                             </label>
                                             <div class="input-group col-md-6">
                                                 <input type="text" class="form-control" placeholder="giá sản phẩm"
-                                                    name="price">
+                                                    name="price" value="<%= item.price %>">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">VNĐ</span>
                                                 </div>
@@ -191,12 +191,6 @@
                                                     <option value="<%= item.manuId %>"><%= item.manuName %></option>
                                                     <% } %>
                                                 </select>
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Hình ảnh
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 dropzone-previews" id="preview">
                                             </div>
                                         </div>
                                         <div class="ln_solid"></div>
