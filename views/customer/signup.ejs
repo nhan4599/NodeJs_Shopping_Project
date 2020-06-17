@@ -21,22 +21,24 @@
     <div class="container demo-1">
         <div class="content">
             <div id="large-header" class="large-header">
-                <h1>Customer login Form</h1>
                 <div class="main-agileits">
                     <div class="form-w3-agile">
-                        <h2>Login Now</h2>
+                        <h2>Sign Up</h2>
                         <form action="/customer/login" method="post">
                             <div class="form-sub-w3">
                                 <input type="text" name="username" placeholder="Username " required="" />
-                                <div class="icon-w3">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                </div>
                             </div>
                             <div class="form-sub-w3">
                                 <input type="password" name="password" placeholder="Password" required="" />
-                                <div class="icon-w3">
-                                    <i class="fa fa-unlock-alt" aria-hidden="true"></i>
-                                </div>
+                            </div>
+                            <div class="form-sub-w3">
+                                <input type="password" name="passwordagain" placeholder="Password again" required="" />
+                            </div>
+                            <div class="form-sub-w3">
+                                <input type="text" name="email" placeholder="Email" required="" />
+                            </div>
+                            <div class="form-sub-w3">
+                                <input type="text" name="phone" placeholder="Phone" required="" />
                             </div>
                             <% if (hasOwnProperty('message')) { %>
                                 <span style="color: red;"><%= message %></span>
@@ -45,30 +47,10 @@
                             <p class="p-bottom-w3ls1">New User?<a class href="#"> Register here</a></p> -->
                             <div class="clear"></div>
                             <div class="submit-w3l">
-                                <input type="submit" value="Sign In">
-                            </div>
-                            <div class="submit-w31">
-                                <a href="/views/customer/signin.ejs" title="Sign Up"><input type="submit" value="Sign Up"></a>
+                                <input type="submit" value="Sign Up">
                             </div>
                         </form>
-                        <div class="social w3layouts">
-                            <div class="heading">
-                                <h5>Or Login with</h5>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="icons">
-                                <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
                     </div>
-                </div>
-                <div class="copyright w3-agile">
-                    <p>Login page</p>
                 </div>
             </div>
         </div>
