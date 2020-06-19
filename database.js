@@ -72,6 +72,13 @@ module.exports.GetProductDetail = async (id) => {
     return result.recordset[0];
 };
 
+module.exports.UpdateProduct = async (id, product) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`update Product set productName = '${product.name}', inventory = ${product.inventory}, cateId = ${product.category}, stateId = ${product.state}, segmentId = ${product.segment}, manuId = ${product.manu} where productId = ${id}`);
+    var subResults = await Promise.all([UpdateProductConfig(conn, id, product.config), UpdateProductImages(conn, id, product.images)]);
+    return [result.rowsAffected[0], subResults[0].rowsAffected[0], subResults[1].rowsAffected[0]];
+};
+
 async function GetProductConfig(conn, id) {
     var result = await conn.query(`select * from Configuration where productId = ${id}`);
     return result.recordset[0];
@@ -89,6 +96,9 @@ async function InsertProductConfig(conn, id, config) {
 async function InsertProductImage(conn, id, images) {
     var str = '';
     var imageList = Object.values(images);
+    if (imageList.length === 0) {
+        return 0;
+    }
     var length = imageList.length <= 4 ? imageList.length : 4;
     for (var i = 0; i < length; i++) {
         if (i !== length - 1)
@@ -98,4 +108,14 @@ async function InsertProductImage(conn, id, images) {
     }
     var queryString = `insert into Image(productId, imgBase64) values${str}`;
     return await conn.query(queryString);
+}
+
+async function UpdateProductConfig(conn, id, config) {
+    var result = await conn.query(`update Configuration set RAM = ${config.ram}, screen = '${config.screen}', rearCamera = '${config.rearCam}', frontCamera = '${config.frontCam}', OS = '${config.os}', storage = ${config.storage}, SDtype = '${config.sdType}', maxSDsize = ${config.sdSize}, batery = ${config.pin} where productId = ${id}`);
+    return result;
+}
+
+async function UpdateProductImages(conn, id, images) {
+    await conn.query(`delete Image where productId = ${id}`);
+    return await InsertProductImage(conn, id, images);
 }
