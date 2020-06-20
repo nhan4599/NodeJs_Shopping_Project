@@ -52,13 +52,12 @@ router.get('/listcategories', (req, res) => {
     res.render('admin/listcategories');
 });
 
-router.get('/listmanufacturers', (req, res) => {
-    var promises = db.GetManufacturerList();
-    Promise.all(promises).then(values => res.render('admin/listmanufacturers', {
-        manufacturers: values[0],
-    }));
+router.get('/listmanufacturers', async (req, res) => {
+    // var promises = db.GetManufacturerList();
+    var list = await db.GetManufacturerList();
+    res.render('admin/listmanufacturers', { list });
 });
-router.post('/addlistmanufacturers',async (req, res)=>{
+router.post('/addlistmanufacturers', async (req, res) => {
     try {
         var results = await db.InsertManufactures(req.session.manufacturers);
         delete req.session.manufacturers;

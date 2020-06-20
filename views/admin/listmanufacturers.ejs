@@ -50,11 +50,16 @@
                         <div class="menu_section active">
                             <h3>General</h3>
                             <ul class="nav side-menu">
-                                <li class="active-on-hover"><a href="/admin/listproducts"><i class="fa fa-edit"></i> Products </a></li>
-                                <li class="active-on-hover"><a href="/admin/listcategories"><i class="fa fa-edit"></i> Products Category </a></li>
-                                <li class="active-on-hover actual"><a href="/admin/listmanufacturers"><i class="fa fa-edit"></i> Products Manufacturer </a></li>
-                                <li class="active-on-hover"><a href="/admin/listorders"><i class="fa fa-edit"></i> Orders </a></li>
-                                <li class="active-on-hover"><a href="/admin/listcustomers"><i class="fa fa-edit"></i> Customers </a></li>
+                                <li class="active-on-hover"><a href="/admin/listproducts"><i class="fa fa-edit"></i>
+                                        Products </a></li>
+                                <li class="active-on-hover"><a href="/admin/listcategories"><i class="fa fa-edit"></i>
+                                        Products Category </a></li>
+                                <li class="active-on-hover actual"><a href="/admin/listmanufacturers"><i
+                                            class="fa fa-edit"></i> Products Manufacturer </a></li>
+                                <li class="active-on-hover"><a href="/admin/listorders"><i class="fa fa-edit"></i>
+                                        Orders </a></li>
+                                <li class="active-on-hover"><a href="/admin/listcustomers"><i class="fa fa-edit"></i>
+                                        Customers </a></li>
                             </ul>
                         </div>
                     </div>
@@ -104,7 +109,8 @@
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>Manufacturers list</h2>
-                                    <a class="btn btn-primary pull-right" style="color: #E7E7E7;" href="/admin/addlistmanufacturer">Add new Manufacturer</a>
+                                    <a class="btn btn-primary pull-right" style="color: #E7E7E7;"
+                                        href="/admin/addlistmanufacturer">Add new Manufacturer</a>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
@@ -128,19 +134,18 @@
                                                     </th>
                                                 </tr>
                                             </thead>
-
                                             <tbody>
-                                                <% for (var i = 0; i < Manufacturers.length; i++) { %>
+                                                <% for (var item of list) { %>
                                                 <tr class="even pointer">
                                                     <td class="a-center ">
                                                         <input type="checkbox" class="flat" name="table_records">
                                                     </td>
-                                                    <td><%= Manufacturers[i].manuId %></td>
-                                                    <td><%= Manufacturers[i].manuName %></td>
-                                                    <td><%= Manufacturers[i].manuAddress %></td>
-                                                    <a href="editManufacturer?id=<%=cat._id%>">EDIT</a>
-                                                     
+                                                    <td><%= item.manuId %></td>
+                                                    <td><%= item.manuName %></td>
+                                                    <td><%= item.manuAddress %></td>
+                                                    <td><a href="editManufacturer?id=<%=item.manuId%>">EDIT</a></td>
                                                 </tr>
+                                                <% } %>
                                             </tbody>
                                         </table>
                                     </div>
