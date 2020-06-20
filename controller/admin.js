@@ -137,7 +137,6 @@ router.post('/getlistimages', (req, res) => {
 });
 
 router.post('/addimages', upload.single('file'), (req, res) => {
-    console.log('ok');
     req.session.productInfo.images[req.file.originalname] = req.file.buffer.toString('base64');
     res.send('ok');
 });
@@ -159,7 +158,6 @@ router.post('/createproduct', async (req, res) => {
             res.redirect('/admin/createproduct');
         }
     } catch (err) {
-        console.log(err);
         res.redirect('/admin/productimages');
     }
 });
@@ -195,6 +193,23 @@ router.post('/addproductmetadata', (req, res) => {
     };
     res.redirect('/admin/productconfig');
 });
+
+router.post('/editproduct', async (req, res) => {
+    console.log('ok');
+    try {
+        var results = await db.UpdateProduct(req.session.productTemp.productId, req.session.productInfo);
+        var rowsAffectedCount = results[0] + results[1] + results[2];
+        delete req.session.productInfo;
+        if (rowsAffectedCount >= 3 && rowsAffectedCount <= 6) {
+            res.redirect('/admin/listproducts');
+        } else {
+            res.redirect('/admin/editproduct/' + req.session.productTemp.productId.toString());
+        }
+    } catch (err) {
+        console.log(err);
+        res.redirect('/admin/productimages');
+    }
+}
 
 router.get('/createcategory', (req, res) => {
     res.render('admin/createcategory');

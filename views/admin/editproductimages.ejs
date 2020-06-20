@@ -230,10 +230,11 @@
                     var count = 1;
                     for (var image of data) {
                         var file = dataURItoBlob('data:image/png;base64,' + image.imgBase64);
+                        file.name = `file${count++}.png`;
                         myDropzone.addFile(file);
                     }
                 }
-            })
+            });
         });
     </script>
 </body>
