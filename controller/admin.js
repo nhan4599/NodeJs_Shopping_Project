@@ -209,7 +209,7 @@ router.post('/editproduct', async (req, res) => {
         console.log(err);
         res.redirect('/admin/productimages');
     }
-}
+});
 
 router.get('/createcategory', (req, res) => {
     res.render('admin/createcategory');
