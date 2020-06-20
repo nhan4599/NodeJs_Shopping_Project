@@ -53,23 +53,27 @@ router.get('/listcategories', (req, res) => {
 });
 
 router.get('/listmanufacturers', async (req, res) => {
-    // var promises = db.GetManufacturerList();
     var list = await db.GetManufacturerList();
     res.render('admin/listmanufacturers', { list });
 });
-router.post('/addlistmanufacturers', async (req, res) => {
-    try {
-        var results = await db.InsertManufactures(req.session.manufacturers);
-        delete req.session.manufacturers;
-        if (rowsAffectedCount >= 3 && rowsAffectedCount <= 6) {
-            res.redirect('/admin/listmanufacturers');
+
+router.get('/addlistmanufacturer',(req,res)=>{
+    res.render('admin/addlistmanufacturer');
+});
+
+router.post('/addlistmanufacturer', async (req, res) => {
+    var name = req.body.txtName;
+    var Manufacturer = {name : name};
+        var results = await db.InsertManufactures(req.session.Manufacturer);
+        if (results) {
+            res.redirect('admin/listmanufacturers');
         } else {
-            res.redirect('/admin/addlistmanufacturers');
-        }
-    } catch (err) {
-        console.log(err);
-        res.redirect('/admin/productimages');
-    }
+            res.redirect('admin/addlistmanufacturer');
+        } 
+});
+
+router.get('/editManufacturer',(req,res)=>{
+    res.render('admin/editManufacturer');
 });
 
 router.get('/listorders', (req, res) => {
