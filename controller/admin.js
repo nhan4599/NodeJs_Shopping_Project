@@ -60,8 +60,9 @@ router.get('/listorders', (req, res) => {
     res.render('admin/listorders');
 });
 
-router.get('/listcustomers', (req, res) => {
-    res.render('admin/listcustomers');
+router.get('/listcustomers', async (req, res) => {
+    var Customer = await db.GetAllCustomer();
+    res.render('admin/listcustomers', { Customer });
 });
 
 router.get('/createproduct', (req, res) => {

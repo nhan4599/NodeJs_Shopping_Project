@@ -99,3 +99,9 @@ async function InsertProductImage(conn, id, images) {
     var queryString = `insert into Image(productId, imgBase64) values${str}`;
     return await conn.query(queryString);
 }
+
+module.exports.GetAllCustomer = async () => {
+    var conn = await pool.connect();
+    var result = await conn.query('select * from Customer');
+    return result.recordset;
+};
