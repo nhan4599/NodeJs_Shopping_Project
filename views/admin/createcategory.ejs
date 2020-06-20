@@ -115,82 +115,18 @@
                         <div class="col-md-12 col-sm-12 ">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Add new product form</h2>
+                                    <h2>Add new category form</h2>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
                                     <br>
-                                    <form class="form-horizontal form-label-left" action="/admin/addproductmetadata" method="POST">
+                                    <form class="form-horizontal form-label-left" action="/admin/createcategory" method="POST">
                                         <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Tên sản phẩm
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Tên loại sản phẩm
                                             </label>
                                             <div class="col-md-6 col-sm-6 ">
                                                 <input type="text" required="required" name="name"
                                                     class="form-control ">
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Số lượng nhập
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 ">
-                                                <input type="number" name="inventory" required="required"
-                                                    class="form-control" value="1">
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Giá
-                                            </label>
-                                            <div class="input-group col-md-6">
-                                                <input type="text" class="form-control" placeholder="giá sản phẩm"
-                                                    name="price">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">VNĐ</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Loại sản
-                                                phẩm</label>
-                                            <div class="col-md-6 col-sm-6">
-                                                <select class="form-control" name="category">
-                                                    <% for (var item of categories) { %>
-                                                    <option value="<%= item.cateId %>"><%= item.cateName %></option>
-                                                    <% } %>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Trạng thái sản
-                                                phẩm</label>
-                                            <div class="col-md-6 col-sm-6">
-                                                <select class="form-control" name="state">
-                                                    <% for (var item of staties) { %>
-                                                    <option value="<%= item.stateId %>"><%= item.stateName %></option>
-                                                    <% } %>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Phân
-                                                khúc</label>
-                                            <div class="col-md-6 col-sm-6">
-                                                <select class="form-control" name="segment">
-                                                    <% for (var item of segments) { %>
-                                                    <option value="<%= item.segmentId %>"><%= item.segmentName %>
-                                                    </option>
-                                                    <% } %>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align">Hãng sản
-                                                xuất</label>
-                                            <div class="col-md-6 col-sm-6">
-                                                <select class="form-control" id="exampleFormControlSelect1" name="manu">
-                                                    <% for (var item of manufacturers) { %>
-                                                    <option value="<%= item.manuId %>"><%= item.manuName %></option>
-                                                    <% } %>
-                                                </select>
                                             </div>
                                         </div>
                                         <div class="ln_solid"></div>

@@ -72,6 +72,24 @@ module.exports.GetProductDetail = async (id) => {
     return result.recordset[0];
 };
 
+module.exports.GetCategoryById = async (id) => {
+    var conn = await pool.connect();
+    var result = await conn.query( `select * from Category where cateId = ${id}`);
+    return result.recordset[0];
+};
+
+module.exports.UpdateCategory = async (id, cateName) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`update Category set cateName = '${cateName}' where cateId = ${id}`);
+    return result.rowsAffected > 0 ? true : false;
+};
+
+module.exports.InsertCategory = async (cateName) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`insert into Category(cateName) values(N'${cateName}')`);
+    return result.rowsAffected > 0 ? true : false;
+};
+
 async function GetProductConfig(conn, id) {
     var result = await conn.query(`select * from Configuration where productId = ${id}`);
     return result.recordset[0];

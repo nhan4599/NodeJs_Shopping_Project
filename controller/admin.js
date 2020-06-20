@@ -48,8 +48,9 @@ router.get('/listproducts', async (req, res) => {
     res.render('admin/listproducts', { products: list, images: imageList });
 });
 
-router.get('/listcategories', (req, res) => {
-    res.render('admin/listcategories');
+router.get('/listcategories', async (req, res) => {
+    var categories = await db.GetCategoryList();
+    res.render('admin/listcategories', { categories });
 });
 
 router.get('/listmanufacturers', (req, res) => {
@@ -193,6 +194,41 @@ router.post('/addproductmetadata', (req, res) => {
         name, inventory, price, category, state, segment, manu
     };
     res.redirect('/admin/productconfig');
+});
+
+router.get('/createcategory', (req, res) => {
+    res.render('admin/createcategory');
+});
+
+router.post('/createcategory', async (req, res) => {
+    var name = req.body.name;
+    var result = await db.InsertCategory(name);
+    if (result) {
+        res.redirect('/admin/listcategories');
+    } else {
+        res.redirect('/admin/createcategory');
+    }
+});
+
+router.get('/editcategory', async (req, res) => {
+    var id = parseInt(req.query.id.toString());
+    if (!Number.isNaN(id)) {
+        req.session.cateId = id;
+        var item = await db.GetCategoryById(id);
+        res.render('admin/editcategory', { item });
+    } else {
+        res.redirect('/listcategories');
+    }
+});
+
+router.post('/editcategory', async (req, res) => {
+    var id = parseInt(req.session.cateId.toString());
+    var result = await db.UpdateCategory(id, req.body.name);
+    if (result) {
+        res.redirect('/admin/listcategories');
+    } else {
+        res.redirect('/admin/editcategory?id=' + id);
+    }
 });
 
 module.exports = router;
