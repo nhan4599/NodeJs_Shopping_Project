@@ -11,6 +11,8 @@ module.exports.GetProductList = async () => {
     return list.recordset;
 };
 
+
+
 module.exports.GetThumbnailImageList = async (products) => {
     var conn = await pool.connect();
     var list = new Array(products.length);
@@ -62,6 +64,12 @@ module.exports.InsertProduct = async (product) => {
     var id = parseInt(insertedId.recordset[0].temp.toString());
     var subResults = await Promise.all([InsertProductConfig(conn, id, product.config), InsertProductImage(conn, id, product.images)]);
     return [result.rowsAffected[0], subResults[0].rowsAffected[0], subResults[1].rowsAffected[0]];
+};
+
+module.exports.InsertManufactures = async (Manufacturer) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`insert into Manufacturer(manuName, manuAddress) values(N'${Manufacturer.name}', ${Manufacturer.address}`);
+    return result.rowsAffected[0];
 };
 
 module.exports.GetProductDetail = async (id) => {

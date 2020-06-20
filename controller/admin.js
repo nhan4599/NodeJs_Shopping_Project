@@ -53,7 +53,24 @@ router.get('/listcategories', (req, res) => {
 });
 
 router.get('/listmanufacturers', (req, res) => {
-    res.render('admin/listmanufacturers');
+    var promises = db.GetManufacturerList();
+    Promise.all(promises).then(values => res.render('admin/listmanufacturers', {
+        manufacturers: values[0],
+    }));
+});
+router.post('/addlistmanufacturers',async (req, res)=>{
+    try {
+        var results = await db.InsertManufactures(req.session.manufacturers);
+        delete req.session.manufacturers;
+        if (rowsAffectedCount >= 3 && rowsAffectedCount <= 6) {
+            res.redirect('/admin/listmanufacturers');
+        } else {
+            res.redirect('/admin/addlistmanufacturers');
+        }
+    } catch (err) {
+        console.log(err);
+        res.redirect('/admin/productimages');
+    }
 });
 
 router.get('/listorders', (req, res) => {
