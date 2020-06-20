@@ -196,4 +196,11 @@ router.post('/addproductmetadata', (req, res) => {
     res.redirect('/admin/productconfig');
 });
 
+router.get('/deactive', async (req, res) => {
+    var Customer = await db.DeactiveAccount();
+    if(req.session.isActive == 1){
+        res.send(0);
+    }
+});
+
 module.exports = router;

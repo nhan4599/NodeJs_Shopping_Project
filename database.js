@@ -105,3 +105,9 @@ module.exports.GetAllCustomer = async () => {
     var result = await conn.query('select * from Customer');
     return result.recordset;
 };
+
+module.exports.DeactiveAccount = async () => {
+    var conn = await pool.connect();
+    var rs = await conn.query('select isActived from Customer');
+    return rs.recordset;
+};
