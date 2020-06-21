@@ -118,6 +118,9 @@
                                                     <th class="column-title">Customer Id </th>
                                                     <th class="column-title">Created Date </th>
                                                     <th class="column-title">State Id </th>
+                                                    <th class="column-title no-link last"><span
+                                                        class="nobr">Action</span>
+                                                </th>
                                                 </tr>
                                             </thead>
 
@@ -131,6 +134,31 @@
                                                         <td><%=item.customerId%></td>
                                                         <td><%=item.createdDate%></td>
                                                         <td><%=item.stateId%></td>
+                                                    <% if (item.stateId ==4) { %>
+                                                        <td>
+                                                            <a href="">Approve</a>
+                                                        ||
+                                                            <a href="">Done</a>                              
+                                                         </td>
+                                                         <%  }else if (item.stateId ==1) { %>   
+                                                            <td>                                                             
+                                                                <a href="">Done</a>
+                                                            ||
+                                                                <a href="">Cancel</a>
+                                                            </td>
+                                                            <%  }else if (item.stateId ==2) { %>   
+                                                                <td>                                                                                                                                   
+                                                                    <a href="">Done</a>                                                                                                                              
+                                                                </td> 
+                                                                <%  }else if (item.stateId ==3) { %>   
+                                                                    <td>
+                                                                        <a href="">Approve</a>
+                                                                    ||
+                                                                        <a href="">Done</a>
+                                                                    </td>  
+                                                                    <%  } %>
+                                                    </tr>
+                                                    <%  } %>
                                                     </tr>
                                                     <%  } %>
                                                 </tr>
