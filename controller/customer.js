@@ -84,7 +84,7 @@ router.get('/activate', async (req, res) => {
     if (result) {
         res.redirect('/login');
     } else {
-        res.status(404).send(`Something went wrong, try to send new active email by click this link: <a href="http://localhost:3000/resendmail?id=${id}">Resend activate email</a>`);
+        res.status(404).send(`Something went wrong, try to send new active email by click this link: <a href="https://vast-shore-03767.herokuapp.com/resendmail?id=${id}">Resend activate email</a>`);
     }
 });
 
