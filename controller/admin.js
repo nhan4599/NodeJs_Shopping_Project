@@ -63,7 +63,8 @@ router.get('/addlistmanufacturer',(req,res)=>{
 
 router.post('/addlistmanufacturer', async (req, res) => {
     var name = req.body.name;
-        var results = await db.InsertManufactures(name);
+    var address = req.body.address;
+        var results = await db.InsertManufactures(name,address);
         if (results) {
             res.redirect('admin/listmanufacturers');
         } else {
@@ -73,19 +74,18 @@ router.post('/addlistmanufacturer', async (req, res) => {
 
 router.get('/editManufacturer',async (req,res)=>{
     var id = parseInt(req.query.id.toString());
-    var list = await db.GetManufacturerList();
     if (!Number.isNaN(id)) {
         req.session.manuId = id;
         var item = await db.GetManuById(id);
         res.render('admin/editManufacturer', { item });
     } else {
-        res.redirect('/listmanufacturers', { list });
+        res.redirect('/listmanufacturers');
     }
 });
 
 router.post('/editManufacturer', async (req, res) => {
     var id = parseInt(req.session.manuId.toString());
-    var result = await db.UpdateManu(id, req.body.name);
+    var result = await db.UpdateManu(id, req.body.manuName, req.body.manuAddress);
     if (result) {
         res.redirect('/admin/listmanufacturers');
     } else {

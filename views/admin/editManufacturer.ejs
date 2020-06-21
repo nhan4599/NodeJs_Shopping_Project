@@ -120,22 +120,20 @@
                                 </div>
                                 <div class="x_content">
                                     <br>
-                                    <form class="form-horizontal form-label-left" action="/admin/addlistmanufacturer" method="POST">
+                                    <form class="form-horizontal form-label-left" action="/admin/editManufacturer" method="POST">
                                         <div class="item form-group">
                                             <label class="col-form-label col-md-3 col-sm-3 label-align">Tên Hãng
                                             </label>
                                             <div class="col-md-6 col-sm-6 ">
-                                                <select class="form-control" name="name">
-                                                    <% for (var item of list) { %>
-                                                    <option value="<%= item.manuId %>"><%= item.manuName %></option>
-                                                    <% } %>
+                                                    <input type="text" required="required" name="manuName"
+                                                    class="form-control" value="<%= item.manuName %>">
                                             </div>
                                         </div>
                                         <div class="item form-group">
                                             <label class="col-form-label col-md-3 col-sm-3 label-align">Địa Chỉ
                                             </label>
                                             <div class="col-md-6 col-sm-6 ">
-                                                <input type="text" name="address" required="required"
+                                                <input type="text" name="manuAddress" required="required"
                                                     class="form-control" value="<%= item.manuAddress %>">
                                             </div>
                                         </div>

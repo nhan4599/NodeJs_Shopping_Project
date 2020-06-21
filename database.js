@@ -66,32 +66,6 @@ module.exports.InsertProduct = async (product) => {
     return [result.rowsAffected[0], subResults[0].rowsAffected[0], subResults[1].rowsAffected[0]];
 };
 
-module.exports.InsertManufactures = async (Manufacturer) => {
-    var conn = await pool.connect();
-    var result = await conn.query(`insert into Manufacturer(manuName, manuAddress) values(N'${Manufacturer.name}', ${Manufacturer.address})`);
-    return result.rowsAffected > 0 ? true : false;
-};
-
-
-
-module.exports.GetCategoryById = async (id) => {
-    var conn = await pool.connect();
-    var result = await conn.query( `select * from Category where cateId = ${id}`);
-    return result.recordset[0];
-};
-
-module.exports.UpdateCategory = async (id, cateName) => {
-    var conn = await pool.connect();
-    var result = await conn.query(`update Category set cateName = '${cateName}' where cateId = ${id}`);
-    return result.rowsAffected > 0 ? true : false;
-};
-
-module.exports.InsertCategory = async (cateName) => {
-    var conn = await pool.connect();
-    var result = await conn.query(`insert into Category(cateName) values(N'${cateName}')`);
-    return result.rowsAffected > 0 ? true : false;
-};
-
 module.exports.GetProductDetail = async (id) => {
     var conn = await pool.connect();
     var result = await conn.query(`select Product.productId, Product.productName, Product.inventory, Product.price, Category.cateName, ProductState.stateName, Segment.segmentName, Manufacturer.manuName from Product, ProductState, Segment, Manufacturer, Category where Product.cateId = Category.cateId and Product.stateId = ProductState.stateId and Product.segmentId = Segment.segmentId and Product.manuId = Manufacturer.manuId and Product.productId = ${id}`);
@@ -127,9 +101,9 @@ async function InsertProductImage(conn, id, images) {
     var queryString = `insert into Image(productId, imgBase64) values${str}`;
     return await conn.query(queryString);
 }
-module.exports.InsertManufactures = async (Manufacturer) => {
+module.exports.InsertManufactures = async (manuName , manuAddress) => {
     var conn = await pool.connect();
-    var result = await conn.query(`insert into Manufacturer(manuName, manuAddress) values(N'${Manufacturer.name}', ${Manufacturer.address})`);
+    var result = await conn.query(`insert into Manufacturer(manuName, manuAddress) values(N'${manuName}', ${manuAddress})`);
     return result.rowsAffected > 0 ? true : false;
 };
 
