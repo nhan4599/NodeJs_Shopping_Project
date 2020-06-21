@@ -106,8 +106,20 @@ module.exports.GetAllCustomer = async () => {
     return result.recordset;
 };
 
-module.exports.DeactiveAccount = async () => {
+module.exports.GetActiveCustomer = async () => {
     var conn = await pool.connect();
-    var rs = await conn.query('select isActived from Customer');
-    return rs.recordset;
+    var result = await conn.query('select isActivated from Customer');
+    return result.recordset;
+};
+
+module.exports.DeactiveAccount = async id => {
+    var conn = await pool.connect();
+    var rs = await conn.query(`update Customer set isActivated = 0 where customerId =${id}`);
+    return rs.rowsAffected[0] == 1 ? true:false
+};
+
+module.exports.resetPassword = async id => {
+    var conn = await pool.connect();
+    var rs = await conn.query(`update Customer set hash = '827ccb0eea8a706c4c34a16891f84e7b' where customerId =${id}`);
+    return rs.rowsAffected[0] == 1 ? true:false
 };

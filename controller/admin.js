@@ -197,10 +197,15 @@ router.post('/addproductmetadata', (req, res) => {
 });
 
 router.get('/deactive', async (req, res) => {
-    var Customer = await db.DeactiveAccount();
-    if(req.session.isActive == 1){
-        res.send(0);
-    }
+    var id = req.query.id;
+    var result = await db.DeactiveAccount(id);
+    res.redirect('/admin/listcustomers')  
+});
+
+router.get('/resetPassword', async (req, res) => {
+    var id = req.query.id;
+    var result = await db.resetPassword(id);
+    res.redirect('/admin/listcustomers')  
 });
 
 module.exports = router;

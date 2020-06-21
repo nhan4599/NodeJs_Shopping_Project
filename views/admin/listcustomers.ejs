@@ -131,19 +131,16 @@
 
                                             <tbody>
                                                 <%  for (var item of Customer) { %>
-                                                    <tr class="datatable" onclick="window.location='./listcustomer?cid=<%=item._id%>'">
-                                                        <th><%=item._id%></th>
+                                                    
+                                                        <th><%=item.customerId%></th>
                                                         <td><%=item.username%></td>
                                                         <td><%=item.email%></td>
-                                                        <td><%=item.isActived%></td>
-                                                        <td>
-                                                            <% if (item.isActived == 0) { %>
-                                                            <a href="./sendmail?id=<%=item._id%>">EMAIL</a>
-                                                            <% } else if (item.isActived == 1) { %>
-                                                            <a href="./deactive?id=<%=item._id%>&token=<%=item.token%>" onclick="return confirm('ARE YOU SURE?')">DEACTIVE</a>
-                                                            <% } %>
-                                                        </td>
+                                                        <td><%=item.isActivated%></td>
                                                         <td><%=item.phoneNumber%></td>
+                                                        <td>
+                                                            <a href="deactive?id=<%=item.customerId%>">DEACTIVE</a>
+                                                        ||
+                                                        <a href="resetPassword?id=<%=item.customerId%>">RESET PASSWORD</a></td>
                                                         <!-- <td><%=item.name%></td> -->
                                                     </tr>
                                                 <%  } %>
