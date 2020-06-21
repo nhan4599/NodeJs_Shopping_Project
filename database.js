@@ -12,6 +12,8 @@ module.exports.GetProductList = async () => {
     return list.recordset;
 };
 
+
+
 module.exports.GetThumbnailImageList = async (products) => {
     var conn = await pool.connect();
     var list = new Array(products.length);
@@ -211,6 +213,23 @@ async function InsertProductImage(conn, id, images) {
     var queryString = `insert into Image(productId, imgBase64) values${str}`;
     return await conn.query(queryString);
 }
+module.exports.InsertManufactures = async (manuName , manuAddress) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`insert into Manufacturer(manuName, manuAddress) values(N'${manuName}', '${manuAddress}')`);
+    return result.rowsAffected > 0 ? true : false;
+};
+
+module.exports.GetManuById = async (id) => {
+    var conn = await pool.connect();
+    var result = await conn.query( `select * from Manufacturer where manuId = ${id}`);
+    return result.recordset[0];
+};
+
+module.exports.UpdateManu = async (id, manuName , manuAddress) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`update Manufacturer set manuName = '${manuName}', manuAddress = '${manuAddress}' where manuId = ${id}`);
+    return result.rowsAffected > 0 ? true : false;
+};
 module.exports.Approve = async id => {
     var conn = await pool.connect();
     var rs = await conn.query(`update Bill set stateId = 1 where billId =${id}`);

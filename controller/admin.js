@@ -55,10 +55,52 @@ router.get('/listcategories', async (req, res) => {
     res.render('admin/listcategories', { categories });
 });
 
-router.get('/listmanufacturers', (req, res) => {
-    res.render('admin/listmanufacturers');
+router.get('/listmanufacturers', async (req, res) => {
+    var list = await db.GetManufacturerList();
+    res.render('admin/listmanufacturers', { list });
 });
 
+router.get('/addlistmanufacturer',(req,res)=>{
+    res.render('admin/addlistmanufacturer');
+});
+
+router.post('/addlistmanufacturer', async (req, res) => {
+    var name = req.body.name;
+    var address = req.body.address;
+        var results = await db.InsertManufactures(name,address);
+        if (results) {
+            res.redirect('/admin/listmanufacturers');
+        } else {
+            res.redirect('/admin/addlistmanufacturer');
+        } 
+});
+
+router.get('/editManufacturer',async (req,res)=>{
+    var id = parseInt(req.query.id.toString());
+    if (!Number.isNaN(id)) {
+        req.session.manuId = id;
+        var item = await db.GetManuById(id);
+        res.render('admin/editManufacturer', { item });
+    } else {
+        res.redirect('/listmanufacturers');
+    }
+});
+
+router.post('/editManufacturer', async (req, res) => {
+    var id = parseInt(req.session.manuId.toString());
+    var result = await db.UpdateManu(id, req.body.manuName, req.body.manuAddress);
+    if (result) {
+        res.redirect('/admin/listmanufacturers');
+    } else {
+        res.redirect('/admin/editManufacturer?id=' + id);
+    }
+});
+
+
+
+router.get('/listorders', (req, res) => {
+    res.render('admin/listorders');
+});
 router.get('/listorders', async (req, res) => {
     var id = req.body.id;
     var Bill = await db.GetBill(id);
