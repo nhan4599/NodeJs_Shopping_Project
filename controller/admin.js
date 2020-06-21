@@ -197,7 +197,6 @@ router.post('/addproductmetadata', (req, res) => {
 });
 
 router.post('/editproduct', async (req, res) => {
-    console.log('ok');
     try {
         var results = await db.UpdateProduct(req.session.productTemp.productId, req.session.productInfo);
         var rowsAffectedCount = results[0] + results[1] + results[2];

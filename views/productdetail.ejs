@@ -30,33 +30,35 @@
                             <div class="header_content d-flex flex-row align-items-center justify-content-start">
                                 <div class="logo"><a href="/">Sublime.</a></div>
                                 <nav class="main_nav">
-                                    <ul>
-                                        <li class="hassubs active">
-                                            <a href="index.html">Home</a>
-                                            <ul>
-                                                <li><a href="product.html">Product</a></li>
-                                                <li><a href="cart.html">Cart</a></li>
-                                                <li><a href="checkout.html">Check out</a></li>
-                                                <li><a href="contact.html">Contact</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="hassubs active">
-                                            <a style="cursor: pointer;">Categories</a>
-                                            <ul>
-                                                <% for (var item of categories) { %>
-                                                <li><a href="/products?cateId=<%= item.cateId %>"><%= item.cateName %></a></li>
-                                                <% } %>
-                                                <li><a href="/products">All product</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="active"><a href="#">Accessories</a></li>
-                                        <li class="active"><a href="#">Offers</a></li>
-                                        <li class="active"><a href="contact.html">Contact</a></li>
-                                    </ul>
-                                </nav>
+									<ul>
+										<li class="hassubs active">
+											<a href="index.html">Home</a>
+											<ul>
+												<li><a href="product.html">Product</a></li>
+												<li><a href="cart.html">Cart</a></li>
+												<li><a href="checkout.html">Check out</a></li>
+												<li><a href="contact.html">Contact</a></li>
+											</ul>
+										</li>
+										<li class="hassubs active">
+											<a style="cursor: pointer;">Categories</a>
+											<ul>
+												<% for (var item of categories) { %>
+												<li><a
+														href="/products?cateId=<%= item.cateId %>"><%= item.cateName %></a>
+												</li>
+												<% } %>
+												<li><a href="/products">All product</a></li>
+											</ul>
+										</li>
+										<li class="active"><a href="#">Accessories</a></li>
+										<li class="active"><a href="#">Orders</a></li>
+										<li class="active"><a href="contact.html">Contact</a></li>
+									</ul>
+								</nav>
                                 <div class="header_extra ml-auto">
                                     <div class="shopping_cart">
-                                        <a href="cart.html">
+                                        <a href="/cart">
                                             <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
                                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                                 viewBox="0 0 489 489" style="enable-background:new 0 0 489 489;"
@@ -69,7 +71,7 @@
 													c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5v-41h45.2l26.9,302.3C412.8,445.2,392.1,462,366.8,462z" />
                                                 </g>
                                             </svg>
-                                            <div>Cart <span>(0)</span></div>
+                                            <div style="margin-left: 6px;">Cart <span id="cart">(<%= session.cart ? session.cart.length : 0 %>)</span></div>
                                         </a>
                                     </div>
                                     <div class="search">
@@ -124,18 +126,18 @@
 
             <!-- Search Panel -->
             <div class="search_panel trans_300">
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            <div class="search_panel_content d-flex flex-row align-items-center justify-content-end">
-                                <form action="#">
-                                    <input type="text" class="search_input" placeholder="Search" required="required">
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<div class="search_panel_content d-flex flex-row align-items-center justify-content-end">
+								<form action="/products" method="GET">
+									<input type="text" class="search_input" placeholder="Search" required="required" name="keyword">
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
             <!-- Social -->
             <div class="header_social">
@@ -456,6 +458,15 @@
     <script src="/assets/plugins/easing/easing.js"></script>
     <script src="/assets/plugins/parallax-js-master/parallax.min.js"></script>
     <script src="/assets/js/product.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('a[href="/cart"]').click(function(e) {
+				if ($('#cart').html() == '(0)') {
+					e.preventDefault();
+				}
+			});
+        });
+    </script>
 </body>
 
 </html>

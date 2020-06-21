@@ -81,7 +81,7 @@ module.exports.UpdateProduct = async (id, product) => {
 
 module.exports.GetCategoryById = async (id) => {
     var conn = await pool.connect();
-    var result = await conn.query( `select * from Category where cateId = ${id}`);
+    var result = await conn.query(`select * from Category where cateId = ${id}`);
     return result.recordset[0];
 };
 
@@ -139,7 +139,43 @@ module.exports.CustomerLogin = async (user, hash) => {
     return result.recordset[0];
 };
 
-async function GetProductImages(conn, id) {
+module.exports.InsertBill = async (custId, items) => {
+    var conn = await pool.connect();
+    var time = new Date().toISOString();
+    var result = await conn.query(`insert into Bill(customerId, createdDate, stateId) values(${custId}, '${time}', 4)`);
+    var insertedId = parseInt((await conn.query('select @@IDENTITY as temp')).recordset[0].temp.toString());
+    var finalResult = await InsertBillDetail(conn, insertedId, items) + result.rowsAffected[0];
+    return finalResult >= 2 ? true : false;
+};
+
+module.exports.GetBillsByCustId = async custId => {
+    var conn = await pool.connect();
+    var result = await conn.query(`select Bill.billId, Bill.createdDate, BillState.stateName from Bill, BillState where customerId = ${custId} and Bill.stateId = BillState.stateId`);
+    return result.recordset;
+};
+
+module.exports.GetBillItem = async billId => {
+    var conn = await pool.connect();
+    var result = await conn.query(`select BillDetail.productId, BillDetail.quantity from BillDetail where billId = ${billId}`);
+    for (var i = 0; i < result.recordset.length; i++) {
+        result.recordset[i].product = await this.GetProductDetail(result.recordset[i].productId);
+    }
+    return result.recordset;
+};
+
+async function InsertBillDetail(conn, id, items) {
+    var str = '';
+    for (var i = 0; i < items.length; i++) {
+        if (i !== items.length - 1)
+            str += `(${id}, ${items[i].productId}, ${items[i].quantity}),`;
+        else
+            str += `(${id}, ${items[i].productId}, ${items[i].quantity})`;
+    }
+    var queryString = `insert into BillDetail(billId, productId, quantity) values${str}`;
+    return (await conn.query(queryString)).rowsAffected[0];
+}
+
+async function GetProductImages(conn, id,) {
     var result = await conn.query(`select * from Image where productId = ${id}`);
     return result.recordset;
 }

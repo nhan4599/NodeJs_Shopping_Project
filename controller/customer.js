@@ -14,13 +14,15 @@ router.get(['/', '/home'], async (req, res) => {
 router.get('/products', async (req, res) => {
     var suitablePromise = null;
     if (req.query.cateId) {
-        var id = parseInt(req.query.cateId.toString());
-        suitablePromise = db.GetProductListByCateId_Customer(id);
+        suitablePromise = db.GetProductListByCateId_Customer(parseInt(req.query.cateId.toString()));
     } else {
         suitablePromise = db.GetProductList_Customer();
     }
     var promises = [suitablePromise, db.GetCategoryList()];
     var values = await Promise.all(promises);
+    if (req.query.keyword) {
+        values[0] = values[0].filter(item => item.productName.toLowerCase().search(req.query.keyword.toString().toLowerCase()) != -1);
+    }
     res.render('products', { products: values[0], categories: values[1] });
 });
 
@@ -82,7 +84,7 @@ router.get('/activate', async (req, res) => {
     if (result) {
         res.redirect('/login');
     } else {
-        res.status(404).send(`Something went wrong, try to send new active email by click this link: <a href="http://localhost:3000/resendmail?id=${id}">Resend activate email</a>`)
+        res.status(404).send(`Something went wrong, try to send new active email by click this link: <a href="http://localhost:3000/resendmail?id=${id}">Resend activate email</a>`);
     }
 });
 
@@ -127,13 +129,88 @@ router.post('/addtocart', async (req, res) => {
         if (index == -1) {
             product.quantity = quantity;
             req.session.cart.push(product);
+            res.send({ status: 1, message: 'added complete successfully' });
         } else {
             req.session.cart[index].quantity += quantity;
+            res.send({ status: 2, message: 'update complete successfully' });
         }
-        res.send({ status: 1, message: 'added complete successfully' });
     } else {
         res.send({ status: 0, message: 'add failed' });
     }
+});
+
+router.get('/cart', async (req, res) => {
+    var categories = await db.GetCategoryList();
+    if (req.session.cart && req.session.cart.length > 0) {
+        var total = 0;
+        for (var item of req.session.cart) {
+            total += parseInt(item.price) * parseInt(item.quantity);
+        }
+        res.render('cart', { categories, total });
+    } else {
+        res.redirect('/');
+    }
+});
+
+router.post('/updatecart', (req, res) => {
+    for (var item of req.body.list) {
+        var index = req.session.cart.findIndex(product => product.productId == item.id);
+        req.session.cart[index].quantity = item.quantity;
+    }
+    res.send({ status: 2, message: 'update cart complete successfully' });
+});
+
+router.post('/clearcart', (req, res) => {
+    delete req.session.cart;
+    res.send({ status: 3, message: 'clear cart complete successfully' });
+});
+
+router.post('/remove', (req, res) => {
+    var index = req.session.cart.findIndex(item => item.productId == req.body.id);
+    if (index != -1) {
+        if (index == 0) {
+            req.session.cart.shift();
+        } else {
+            req.session.cart.splice(index, 1);
+        }
+        res.send({ status: 4, message: 'delete item from cart complete successfully' });
+    } else {
+        res.send({ status: 0, message: 'delete failed' });
+    }
+});
+
+router.get('/checkout', async (req, res) => {
+    var categories = await db.GetCategoryList();
+    if (req.session.cart && req.session.cart.length > 0) {
+        var total = 0;
+        for (var item of req.session.cart) {
+            total += parseInt(item.price) * parseInt(item.quantity);
+        }
+        res.render('checkout', { categories, total });
+    } else {
+        res.redirect('/');
+    }
+});
+
+router.post('/checkout', async (req, res) => {
+    var result = await db.InsertBill(req.session.customer.customerId, req.session.cart);
+    if (result) {
+        delete req.session.cart;
+        res.redirect('/');
+    } else {
+        res.redirect('/checkout');
+    }
+});
+
+router.get('/myorders', async (req, res) => {
+    var categories = await db.GetCategoryList();
+    var bills = await db.GetBillsByCustId(req.session.customer.customerId);
+    var items = null;
+    if (req.query.id) {
+        items = await db.GetBillItem(req.query.id);
+    }
+    res.render('myorders', { categories, bills, items });
+
 });
 
 function validateEmail(email) {
