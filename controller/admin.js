@@ -66,9 +66,9 @@ router.post('/addlistmanufacturer', async (req, res) => {
     var address = req.body.address;
         var results = await db.InsertManufactures(name,address);
         if (results) {
-            res.redirect('admin/listmanufacturers');
+            res.redirect('/admin/listmanufacturers');
         } else {
-            res.redirect('admin/addlistmanufacturer');
+            res.redirect('/admin/addlistmanufacturer');
         } 
 });
 
