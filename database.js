@@ -31,6 +31,12 @@ module.exports.AdminLogin = async (username, password) => {
     }
 };
 
+module.exports.GetBill = async () => {
+    var conn = await pool.connect();
+    var list = await conn.query('select * from Bill');
+    return list.recordset;
+};
+
 module.exports.GetCategoryList = async () => {
     var conn = await pool.connect();
     var list = await conn.query('select * from Category');

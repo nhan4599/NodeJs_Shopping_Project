@@ -56,7 +56,9 @@ router.get('/listmanufacturers', (req, res) => {
     res.render('admin/listmanufacturers');
 });
 
-router.get('/listorders', (req, res) => {
+router.get('/listorders', async (req, res) => {
+    var id = req.body.id;
+    var result = await db.GetBill(id);
     res.render('admin/listorders');
 });
 
