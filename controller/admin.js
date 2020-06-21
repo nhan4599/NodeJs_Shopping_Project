@@ -59,13 +59,33 @@ router.get('/listmanufacturers', (req, res) => {
     res.render('admin/listmanufacturers');
 });
 
-router.get('/listorders', (req, res) => {
-    res.render('admin/listorders');
+router.get('/listorders', async (req, res) => {
+    var id = req.body.id;
+    var Bill = await db.GetBill(id);
+    res.render('admin/listorders',{Bill});
 });
 
 router.get('/listcustomers', async (req, res) => {
     var Customer = await db.GetAllCustomer();
     res.render('admin/listcustomers', { Customer });
+});
+
+router.get('/approve', async (req,res)=>{
+    var id = req.query.id;
+    var result = await db.Approve(id);
+    res.redirect('/admin/listorders');
+});
+
+router.get('/completed', async (req,res)=>{
+    var id = req.query.id;
+    var result = await db.Complete(id);
+    res.redirect('/admin/listorders');
+});
+
+router.get('/cancel', async (req,res)=>{
+    var id = req.query.id;
+    var result = await db.Cancel(id);
+    res.redirect('/admin/listorders');
 });
 
 router.get('/createproduct', (req, res) => {

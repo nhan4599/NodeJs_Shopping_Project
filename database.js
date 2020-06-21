@@ -31,6 +31,12 @@ module.exports.AdminLogin = async (username, hash) => {
     }
 };
 
+module.exports.GetBill = async () => {
+    var conn = await pool.connect();
+    var list = await conn.query('select * from Bill');
+    return list.recordset;
+};
+
 module.exports.GetCategoryList = async () => {
     var conn = await pool.connect();
     var list = await conn.query('select * from Category');
@@ -205,27 +211,19 @@ async function InsertProductImage(conn, id, images) {
     var queryString = `insert into Image(productId, imgBase64) values${str}`;
     return await conn.query(queryString);
 }
-
-module.exports.GetAllCustomer = async () => {
+module.exports.Approve = async id => {
     var conn = await pool.connect();
-    var result = await conn.query('select * from Customer');
-    return result.recordset;
-};
-
-module.exports.GetActiveCustomer = async () => {
-    var conn = await pool.connect();
-    var result = await conn.query('select isActivated from Customer');
-    return result.recordset;
-};
-
-module.exports.DeactiveAccount = async id => {
-    var conn = await pool.connect();
-    var rs = await conn.query(`update Customer set isActivated = 0 where customerId =${id}`);
+    var rs = await conn.query(`update Bill set stateId = 1 where billId =${id}`);
     return rs.rowsAffected[0] == 1 ? true:false
 };
 
-module.exports.resetPassword = async id => {
+module.exports.Complete = async id => {
     var conn = await pool.connect();
-    var rs = await conn.query(`update Customer set hash = '827ccb0eea8a706c4c34a16891f84e7b' where customerId =${id}`);
+    var rs = await conn.query(`update Bill set stateId = 2 where billId =${id}`);
+    return rs.rowsAffected[0] == 1 ? true:false
+};
+module.exports.Cancel = async id => {
+    var conn = await pool.connect();
+    var rs = await conn.query(`update Bill set stateId = 3 where billId =${id}`);
     return rs.rowsAffected[0] == 1 ? true:false
 };
