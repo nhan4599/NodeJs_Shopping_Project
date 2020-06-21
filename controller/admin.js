@@ -63,8 +63,9 @@ router.get('/listorders', (req, res) => {
     res.render('admin/listorders');
 });
 
-router.get('/listcustomers', (req, res) => {
-    res.render('admin/listcustomers');
+router.get('/listcustomers', async (req, res) => {
+    var Customer = await db.GetAllCustomer();
+    res.render('admin/listcustomers', { Customer });
 });
 
 router.get('/createproduct', (req, res) => {
@@ -245,6 +246,18 @@ router.post('/editcategory', async (req, res) => {
     } else {
         res.redirect('/admin/editcategory?id=' + id);
     }
+});
+
+router.get('/deactive', async (req, res) => {
+    var id = req.query.id;
+    var result = await db.DeactiveAccount(id);
+    res.redirect('/admin/listcustomers')  
+});
+
+router.get('/resetPassword', async (req, res) => {
+    var id = req.query.id;
+    var result = await db.resetPassword(id);
+    res.redirect('/admin/listcustomers')  
 });
 
 module.exports = router;
