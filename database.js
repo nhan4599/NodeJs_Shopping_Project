@@ -68,7 +68,7 @@ module.exports.InsertProduct = async (product) => {
 
 module.exports.InsertManufactures = async (Manufacturer) => {
     var conn = await pool.connect();
-    var result = await conn.query(`insert into Manufactureres(manuName, manuAddress) values(N'${Manufacturer.name}', ${Manufacturer.address})`);
+    var result = await conn.query(`insert into Manufacturer(manuName, manuAddress) values(N'${Manufacturer.name}', ${Manufacturer.address})`);
     return result.rowsAffected[0];
 };
 
