@@ -4,7 +4,6 @@ var mailsender = require('../mailsender');
 var crypt = require('../cryptutils');
 
 var router = express.Router();
-var upload = multer({});
 
 router.get(['/', '/home'], async (req, res) => {
     var promises = [db.GetProductList_Customer(), db.GetCategoryList()];

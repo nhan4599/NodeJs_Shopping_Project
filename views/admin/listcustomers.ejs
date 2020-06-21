@@ -131,11 +131,11 @@
 
                                             <tbody>
                                                 <%  for (var item of Customer) { %>                                                  
-                                                        <th><%=item.customerId%></th>
-                                                        <td><%=item.username%></td>
-                                                        <td><%=item.email%></td>
-                                                        <td><%=item.isActivated%></td>
-                                                        <td><%=item.phoneNumber%></td>
+                                                        <th><%= item.customerId %></th>
+                                                        <td><%= item.username %></td>
+                                                        <td><%= item.email %></td>
+                                                        <td><%= item.isActivated %></td>
+                                                        <td><%= item.phoneNumber %></td>
                                                         <td>
                                                             <a href="deactive?id=<%=item.customerId%>">DEACTIVE</a>
                                                         ||

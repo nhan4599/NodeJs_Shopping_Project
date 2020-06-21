@@ -60,22 +60,22 @@ router.get('/listmanufacturers', async (req, res) => {
     res.render('admin/listmanufacturers', { list });
 });
 
-router.get('/addlistmanufacturer',(req,res)=>{
+router.get('/addlistmanufacturer', (req, res) => {
     res.render('admin/addlistmanufacturer');
 });
 
 router.post('/addlistmanufacturer', async (req, res) => {
     var name = req.body.name;
     var address = req.body.address;
-        var results = await db.InsertManufactures(name,address);
-        if (results) {
-            res.redirect('/admin/listmanufacturers');
-        } else {
-            res.redirect('/admin/addlistmanufacturer');
-        } 
+    var results = await db.InsertManufactures(name, address);
+    if (results) {
+        res.redirect('/admin/listmanufacturers');
+    } else {
+        res.redirect('/admin/addlistmanufacturer');
+    }
 });
 
-router.get('/editManufacturer',async (req,res)=>{
+router.get('/editManufacturer', async (req, res) => {
     var id = parseInt(req.query.id.toString());
     if (!Number.isNaN(id)) {
         req.session.manuId = id;
@@ -96,15 +96,10 @@ router.post('/editManufacturer', async (req, res) => {
     }
 });
 
-
-
-router.get('/listorders', (req, res) => {
-    res.render('admin/listorders');
-});
 router.get('/listorders', async (req, res) => {
     var id = req.body.id;
     var Bill = await db.GetBill(id);
-    res.render('admin/listorders',{Bill});
+    res.render('admin/listorders', { Bill });
 });
 
 router.get('/listcustomers', async (req, res) => {
@@ -112,19 +107,19 @@ router.get('/listcustomers', async (req, res) => {
     res.render('admin/listcustomers', { Customer });
 });
 
-router.get('/approve', async (req,res)=>{
+router.get('/approve', async (req, res) => {
     var id = req.query.id;
     var result = await db.Approve(id);
     res.redirect('/admin/listorders');
 });
 
-router.get('/completed', async (req,res)=>{
+router.get('/completed', async (req, res) => {
     var id = req.query.id;
     var result = await db.Complete(id);
     res.redirect('/admin/listorders');
 });
 
-router.get('/cancel', async (req,res)=>{
+router.get('/cancel', async (req, res) => {
     var id = req.query.id;
     var result = await db.Cancel(id);
     res.redirect('/admin/listorders');
@@ -313,13 +308,13 @@ router.post('/editcategory', async (req, res) => {
 router.get('/deactive', async (req, res) => {
     var id = req.query.id;
     var result = await db.DeactiveAccount(id);
-    res.redirect('/admin/listcustomers')  
+    res.redirect('/admin/listcustomers');
 });
 
 router.get('/resetPassword', async (req, res) => {
     var id = req.query.id;
-    var result = await db.resetPassword(id);
-    res.redirect('/admin/listcustomers')  
+    var result = await db.SetPassword(id, '123');
+    res.redirect('/admin/listcustomers');
 });
 
 module.exports = router;

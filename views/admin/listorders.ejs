@@ -50,11 +50,16 @@
                         <div class="menu_section active">
                             <h3>General</h3>
                             <ul class="nav side-menu">
-                                <li class="active-on-hover"><a href="/admin/listproducts"><i class="fa fa-edit"></i> Products </a></li>
-                                <li class="active-on-hover"><a href="/admin/listcategories"><i class="fa fa-edit"></i> Products Category </a></li>
-                                <li class="active-on-hover"><a href="/admin/listmanufacturers"><i class="fa fa-edit"></i> Products Manufacturer </a></li>
-                                <li class="active-on-hover actual"><a href="/admin/listorders"><i class="fa fa-edit"></i> Orders </a></li>
-                                <li class="active-on-hover"><a href="/admin/listcustomers"><i class="fa fa-edit"></i> Customers </a></li>
+                                <li class="active-on-hover"><a href="/admin/listproducts"><i class="fa fa-edit"></i>
+                                        Products </a></li>
+                                <li class="active-on-hover"><a href="/admin/listcategories"><i class="fa fa-edit"></i>
+                                        Products Category </a></li>
+                                <li class="active-on-hover"><a href="/admin/listmanufacturers"><i
+                                            class="fa fa-edit"></i> Products Manufacturer </a></li>
+                                <li class="active-on-hover actual"><a href="/admin/listorders"><i
+                                            class="fa fa-edit"></i> Orders </a></li>
+                                <li class="active-on-hover"><a href="/admin/listcustomers"><i class="fa fa-edit"></i>
+                                        Customers </a></li>
                             </ul>
                         </div>
                     </div>
@@ -119,52 +124,52 @@
                                                     <th class="column-title">Created Date </th>
                                                     <th class="column-title">State Id </th>
                                                     <th class="column-title no-link last"><span
-                                                        class="nobr">Action</span>
-                                                </th>
+                                                            class="nobr">Action</span>
+                                                    </th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
                                                 <tr class="even pointer">
-                                                    <%  for (var item of Bill) { %>                                                   
-                                                        <td class="a-center"></td>
-                                                        <td><%=item.billId%></td>
-                                                        <td><%=item.customerId%></td>
-                                                        <td><%=item.createdDate%></td>
-                                                        <td><%=item.stateId%></td>
+                                                    <%  for (var item of Bill) { %>
+                                                    <td class="a-center"></td>
+                                                    <td><%=item.billId%></td>
+                                                    <td><%=item.customerId%></td>
+                                                    <td><%=item.createdDate%></td>
+                                                    <td><%=item.stateId%></td>
                                                     <% if (item.stateId ==4) { %>
-                                                        <td>
-                                                            <a href="approve?id=<%=item.billId%>">Approve</a>
+                                                    <td>
+                                                        <a href="approve?id=<%=item.billId%>">Approve</a>
                                                         ||
-                                                            <a href="completed?id=<%=item.billId%>">Done</a> 
+                                                        <a href="completed?id=<%=item.billId%>">Done</a>
                                                         ||
-                                                            <a href="cancel?id=<%=item.billId%>">Cancel</a>                             
-                                                         </td>
-                                                         <%  }else if (item.stateId ==1) { %>   
-                                                            <td>                                                             
-                                                                <a href="completed?id=<%=item.billId%>">Done</a>
-                                                            ||
-                                                                <a href="cancel?id=<%=item.billId%>">Cancel</a>
-                                                            </td>
-                                                            <%  }else if (item.stateId ==2) { %>   
-                                                                <td>                                                                                                                                   
-                                                                    <a href="completed?id=<%=item.billId%>">Done</a>                                                                                                                              
-                                                                </td> 
-                                                                <%  }else if (item.stateId ==3) { %>   
-                                                                    <td>
-                                                                        <a href="approve?id=<%=item.billId%>">Approve</a>
-                                                                    ||
-                                                                        <a href="cancel?id=<%=item.billId%>">Cancel</a>
-                                                                    </td>  
-                                                                <%  } %>
-                                                    </tr>
+                                                        <a href="cancel?id=<%=item.billId%>">Cancel</a>
+                                                    </td>
+                                                    <%  }else if (item.stateId ==1) { %>
+                                                    <td>
+                                                        <a href="completed?id=<%=item.billId%>">Done</a>
+                                                        ||
+                                                        <a href="cancel?id=<%=item.billId%>">Cancel</a>
+                                                    </td>
+                                                    <%  }else if (item.stateId ==2) { %>
+                                                    <td>
+                                                        <a href="completed?id=<%=item.billId%>">Done</a>
+                                                    </td>
+                                                    <%  }else if (item.stateId ==3) { %>
+                                                    <td>
+                                                        <a href="approve?id=<%=item.billId%>">Approve</a>
+                                                        ||
+                                                        <a href="cancel?id=<%=item.billId%>">Cancel</a>
+                                                    </td>
                                                     <%  } %>
-                                                    </tr>
-                                                    
+                                                </tr>
+                                                <%  } %>
+                                                </tr>
+
                                                 </tr>
                                             </tbody>
                                         </table>
-                                       
+
                                     </div>
                                 </div>
                             </div>

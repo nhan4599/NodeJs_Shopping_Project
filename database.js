@@ -2,8 +2,6 @@ var sql = require('mssql');
 
 var constant = require('./constant');
 
-var crypt = require('./cryptutils');
-
 var pool = new sql.ConnectionPool(constant.dbConfig);
 
 module.exports.GetProductList = async () => {
@@ -12,7 +10,15 @@ module.exports.GetProductList = async () => {
     return list.recordset;
 };
 
+async function UpdateProductConfig(conn, id, config) {
+    var result = await conn.query(`update Configuration set RAM = ${config.ram}, screen = '${config.screen}', rearCamera = '${config.rearCam}', frontCamera = '${config.frontCam}', OS = '${config.os}', storage = ${config.storage}, SDtype = '${config.sdType}', maxSDsize = ${config.sdSize}, batery = ${config.pin} where productId = ${id}`);
+    return result;
+}
 
+async function UpdateProductImages(conn, id, images) {
+    await conn.query(`delete Image where productId = ${id}`);
+    return await InsertProductImage(conn, id, images);
+}
 
 module.exports.GetThumbnailImageList = async (products) => {
     var conn = await pool.connect();
@@ -156,6 +162,12 @@ module.exports.InsertBill = async (custId, items) => {
     return finalResult >= 2 ? true : false;
 };
 
+module.exports.GetAllCustomer = async () => {
+    var conn = await pool.connect();
+    var result = await conn.query('select * from Customer');
+    return result.recordset;
+};
+
 module.exports.GetBillsByCustId = async custId => {
     var conn = await pool.connect();
     var result = await conn.query(`select Bill.billId, Bill.createdDate, BillState.stateName from Bill, BillState where customerId = ${custId} and Bill.stateId = BillState.stateId`);
@@ -213,7 +225,7 @@ async function InsertProductImage(conn, id, images) {
     var queryString = `insert into Image(productId, imgBase64) values${str}`;
     return await conn.query(queryString);
 }
-module.exports.InsertManufactures = async (manuName , manuAddress) => {
+module.exports.InsertManufactures = async (manuName, manuAddress) => {
     var conn = await pool.connect();
     var result = await conn.query(`insert into Manufacturer(manuName, manuAddress) values(N'${manuName}', '${manuAddress}')`);
     return result.rowsAffected > 0 ? true : false;
@@ -221,11 +233,11 @@ module.exports.InsertManufactures = async (manuName , manuAddress) => {
 
 module.exports.GetManuById = async (id) => {
     var conn = await pool.connect();
-    var result = await conn.query( `select * from Manufacturer where manuId = ${id}`);
+    var result = await conn.query(`select * from Manufacturer where manuId = ${id}`);
     return result.recordset[0];
 };
 
-module.exports.UpdateManu = async (id, manuName , manuAddress) => {
+module.exports.UpdateManu = async (id, manuName, manuAddress) => {
     var conn = await pool.connect();
     var result = await conn.query(`update Manufacturer set manuName = '${manuName}', manuAddress = '${manuAddress}' where manuId = ${id}`);
     return result.rowsAffected > 0 ? true : false;
@@ -233,16 +245,26 @@ module.exports.UpdateManu = async (id, manuName , manuAddress) => {
 module.exports.Approve = async id => {
     var conn = await pool.connect();
     var rs = await conn.query(`update Bill set stateId = 1 where billId =${id}`);
-    return rs.rowsAffected[0] == 1 ? true:false
+    return rs.rowsAffected[0] == 1 ? true : false;
 };
 
 module.exports.Complete = async id => {
     var conn = await pool.connect();
     var rs = await conn.query(`update Bill set stateId = 2 where billId =${id}`);
-    return rs.rowsAffected[0] == 1 ? true:false
+    return rs.rowsAffected[0] == 1 ? true : false;
 };
 module.exports.Cancel = async id => {
     var conn = await pool.connect();
     var rs = await conn.query(`update Bill set stateId = 3 where billId =${id}`);
-    return rs.rowsAffected[0] == 1 ? true:false
+    return rs.rowsAffected[0] == 1 ? true : false;
+};
+
+module.exports.SetPassword = async (id, hash) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`update Customer set hash = ${hash} where customerId = ${id}`);
+};
+module.exports.DeactiveAccount = async id => {
+    var conn = await pool.connect();
+    var rs = await conn.query(`update Customer set isActivated = 0 where customerId = ${id}`);
+    return rs.rowsAffected[0] == 1 ? true : false;
 };
