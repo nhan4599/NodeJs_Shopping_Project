@@ -69,7 +69,27 @@ module.exports.InsertProduct = async (product) => {
 module.exports.InsertManufactures = async (Manufacturer) => {
     var conn = await pool.connect();
     var result = await conn.query(`insert into Manufacturer(manuName, manuAddress) values(N'${Manufacturer.name}', ${Manufacturer.address})`);
-    return result.rowsAffected[0];
+    return result.rowsAffected > 0 ? true : false;
+};
+
+
+
+module.exports.GetCategoryById = async (id) => {
+    var conn = await pool.connect();
+    var result = await conn.query( `select * from Category where cateId = ${id}`);
+    return result.recordset[0];
+};
+
+module.exports.UpdateCategory = async (id, cateName) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`update Category set cateName = '${cateName}' where cateId = ${id}`);
+    return result.rowsAffected > 0 ? true : false;
+};
+
+module.exports.InsertCategory = async (cateName) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`insert into Category(cateName) values(N'${cateName}')`);
+    return result.rowsAffected > 0 ? true : false;
 };
 
 module.exports.GetProductDetail = async (id) => {
@@ -107,3 +127,20 @@ async function InsertProductImage(conn, id, images) {
     var queryString = `insert into Image(productId, imgBase64) values${str}`;
     return await conn.query(queryString);
 }
+module.exports.InsertManufactures = async (Manufacturer) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`insert into Manufacturer(manuName, manuAddress) values(N'${Manufacturer.name}', ${Manufacturer.address})`);
+    return result.rowsAffected > 0 ? true : false;
+};
+
+module.exports.GetManuById = async (id) => {
+    var conn = await pool.connect();
+    var result = await conn.query( `select * from Manufacturer where manuId = ${id}`);
+    return result.recordset[0];
+};
+
+module.exports.UpdateManu = async (id, manuName , manuAddress) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`update Manufacturer set manuName = '${manuName}', manuAddress = '${manuAddress}' where manuId = ${id}`);
+    return result.rowsAffected > 0 ? true : false;
+};
