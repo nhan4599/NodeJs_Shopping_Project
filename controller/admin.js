@@ -1,5 +1,6 @@
 var express = require('express');
 var db = require('../database');
+var crypt = require('../cryptutils');
 var multer = require('multer');
 
 var router = express.Router();
@@ -23,7 +24,8 @@ router.get(['/', '/home'], (req, res) => {
 router.post('/login', async (req, res) => {
     var username = req.body.username;
     var pass = req.body.password;
-    var result = await db.AdminLogin(username, pass);
+    var hash = crypt.GetPasswordHash(pass);
+    var result = await db.AdminLogin(username, hash);
     if (result.message) {
         res.render('admin/login', { message: 'Unexpected error' });
     }
@@ -48,8 +50,9 @@ router.get('/listproducts', async (req, res) => {
     res.render('admin/listproducts', { products: list, images: imageList });
 });
 
-router.get('/listcategories', (req, res) => {
-    res.render('admin/listcategories');
+router.get('/listcategories', async (req, res) => {
+    var categories = await db.GetCategoryList();
+    res.render('admin/listcategories', { categories });
 });
 
 router.get('/listmanufacturers', (req, res) => {
@@ -62,8 +65,9 @@ router.get('/listorders', async (req, res) => {
     res.render('admin/listorders',{Bill});
 });
 
-router.get('/listcustomers', (req, res) => {
-    res.render('admin/listcustomers');
+router.get('/listcustomers', async (req, res) => {
+    var Customer = await db.GetAllCustomer();
+    res.render('admin/listcustomers', { Customer });
 });
 
 router.get('/approve', async (req,res)=>{
@@ -156,7 +160,6 @@ router.post('/getlistimages', (req, res) => {
 });
 
 router.post('/addimages', upload.single('file'), (req, res) => {
-    console.log('ok');
     req.session.productInfo.images[req.file.originalname] = req.file.buffer.toString('base64');
     res.send('ok');
 });
@@ -178,7 +181,6 @@ router.post('/createproduct', async (req, res) => {
             res.redirect('/admin/createproduct');
         }
     } catch (err) {
-        console.log(err);
         res.redirect('/admin/productimages');
     }
 });
@@ -213,6 +215,69 @@ router.post('/addproductmetadata', (req, res) => {
         name, inventory, price, category, state, segment, manu
     };
     res.redirect('/admin/productconfig');
+});
+
+router.post('/editproduct', async (req, res) => {
+    try {
+        var results = await db.UpdateProduct(req.session.productTemp.productId, req.session.productInfo);
+        var rowsAffectedCount = results[0] + results[1] + results[2];
+        delete req.session.productInfo;
+        if (rowsAffectedCount >= 3 && rowsAffectedCount <= 6) {
+            res.redirect('/admin/listproducts');
+        } else {
+            res.redirect('/admin/editproduct/' + req.session.productTemp.productId.toString());
+        }
+    } catch (err) {
+        console.log(err);
+        res.redirect('/admin/productimages');
+    }
+});
+
+router.get('/createcategory', (req, res) => {
+    res.render('admin/createcategory');
+});
+
+router.post('/createcategory', async (req, res) => {
+    var name = req.body.name;
+    var result = await db.InsertCategory(name);
+    if (result) {
+        res.redirect('/admin/listcategories');
+    } else {
+        res.redirect('/admin/createcategory');
+    }
+});
+
+router.get('/editcategory', async (req, res) => {
+    var id = parseInt(req.query.id.toString());
+    if (!Number.isNaN(id)) {
+        req.session.cateId = id;
+        var item = await db.GetCategoryById(id);
+        res.render('admin/editcategory', { item });
+    } else {
+        res.redirect('/listcategories');
+    }
+});
+
+router.post('/editcategory', async (req, res) => {
+    var id = parseInt(req.session.cateId.toString());
+    var result = await db.UpdateCategory(id, req.body.name);
+    if (result) {
+        res.redirect('/admin/listcategories');
+    } else {
+        res.redirect('/admin/editcategory?id=' + id);
+    }
+});
+
+router.get('/deactive', async (req, res) => {
+    var id = req.query.id;
+    var result = await db.DeactiveAccount(id);
+    res.redirect('/admin/listcustomers')  
+});
+
+router.get('/resetPassword', async (req, res) => {
+    var id = req.query.id;
+    var result = await db.resetPassword(id);
+    res.redirect('/admin/listcustomers')  
 });
 
 module.exports = router;
