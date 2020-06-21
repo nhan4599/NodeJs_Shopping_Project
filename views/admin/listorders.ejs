@@ -114,26 +114,23 @@
                                                     <th>
                                                         <input type="checkbox" id="check-all" class="flat">
                                                     </th>
-                                                    <th class="column-title">BillId </th>
-                                                    <th class="column-title">CustomerId </th>
-                                                    <th class="column-title">CreatedDate </th>
-                                                    <th class="column-title">StateId </th>
+                                                    <th class="column-title">Bill Id </th>
+                                                    <th class="column-title">Customer Id </th>
+                                                    <th class="column-title">Created Date </th>
+                                                    <th class="column-title">State Id </th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
                                                 <tr class="even pointer">
-                                                    <%  for (var item of Bill) { %>
-                                                        <tr class ="datatable" onclick="window.location='./listorders?id=<%=item.billId%>'"></tr>
-                                                            
-                                                        
+                                                    <%  for (var item of Bill) { %>                                                   
                                                         <td class="a-center ">
-                                                            <input type="checkbox" class="flat" name="table_records">
+                                                        <input type="checkbox" class="flat" name="table_records">
                                                         </td>
-                                                        <td class=" "><%=item._billId%></td>
-                                                        <td class=" "><%=item._customerId%></td>
-                                                        <td class=" "><%=item._createdDate%></td>
-                                                        <td class=" "><%=item._stateId%></td>
+                                                        <td><%=item.billId%></td>
+                                                        <td><%=item.customerId%></td>
+                                                        <td><%=item.createdDate%></td>
+                                                        <td><%=item.stateId%></td>
                                                     </tr>
                                                     <%  } %>
                                                 </tr>
