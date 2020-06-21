@@ -105,3 +105,20 @@ async function InsertProductImage(conn, id, images) {
     var queryString = `insert into Image(productId, imgBase64) values${str}`;
     return await conn.query(queryString);
 }
+
+module.exports.Approve = async id => {
+    var conn = await pool.connect();
+    var rs = await conn.query(`update Bill set stateId = 1 where billId =${id}`);
+    return rs.rowsAffected[0] == 1 ? true:false
+}
+
+module.exports.Complete = async id => {
+    var conn = await pool.connect();
+    var rs = await conn.query(`update Bill set stateId = 2 where billId =${id}`);
+    return rs.rowsAffected[0] == 1 ? true:false
+}
+module.exports.Cancel = async id => {
+    var conn = await pool.connect();
+    var rs = await conn.query(`update Bill set stateId = 3 where billId =${id}`);
+    return rs.rowsAffected[0] == 1 ? true:false
+}

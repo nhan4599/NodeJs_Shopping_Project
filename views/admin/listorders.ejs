@@ -136,31 +136,33 @@
                                                         <td><%=item.stateId%></td>
                                                     <% if (item.stateId ==4) { %>
                                                         <td>
-                                                            <a href="">Approve</a>
+                                                            <a href="approve?id=<%=item.billId%>">Approve</a>
                                                         ||
-                                                            <a href="">Done</a>                              
+                                                            <a href="completed?id=<%=item.billId%>">Done</a> 
+                                                        ||
+                                                            <a href="cancel?id=<%=item.billId%>">Cancel</a>                             
                                                          </td>
                                                          <%  }else if (item.stateId ==1) { %>   
                                                             <td>                                                             
-                                                                <a href="">Done</a>
+                                                                <a href="completed?id=<%=item.billId%>">Done</a>
                                                             ||
-                                                                <a href="">Cancel</a>
+                                                                <a href="cancel?id=<%=item.billId%>">Cancel</a>
                                                             </td>
                                                             <%  }else if (item.stateId ==2) { %>   
                                                                 <td>                                                                                                                                   
-                                                                    <a href="">Done</a>                                                                                                                              
+                                                                    <a href="completed?id=<%=item.billId%>">Done</a>                                                                                                                              
                                                                 </td> 
                                                                 <%  }else if (item.stateId ==3) { %>   
                                                                     <td>
-                                                                        <a href="">Approve</a>
+                                                                        <a href="approve?id=<%=item.billId%>">Approve</a>
                                                                     ||
-                                                                        <a href="">Done</a>
+                                                                        <a href="cancel?id=<%=item.billId%>">Cancel</a>
                                                                     </td>  
-                                                                    <%  } %>
+                                                                <%  } %>
                                                     </tr>
                                                     <%  } %>
                                                     </tr>
-                                                    <%  } %>
+                                                    
                                                 </tr>
                                             </tbody>
                                         </table>

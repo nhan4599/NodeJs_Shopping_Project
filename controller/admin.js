@@ -66,6 +66,24 @@ router.get('/listcustomers', (req, res) => {
     res.render('admin/listcustomers');
 });
 
+router.get('/approve', async (req,res)=>{
+    var id = req.body.id;
+    var result = await db.Approve(id);
+    res.redirect('/admin/listorders');
+});
+
+router.get('/completed', async (req,res)=>{
+    var id = req.body.id;
+    var result = await db.Complete(id);
+    res.redirect('/admin/listorders');
+});
+
+router.get('/cancel', async (req,res)=>{
+    var id = req.body.id;
+    var result = await db.Cancel(id);
+    res.redirect('/admin/listorders');
+});
+
 router.get('/createproduct', (req, res) => {
     var promises = [db.GetCategoryList(), db.GetManufacturerList(), db.GetSegmentList(), db.GetProductStateList()];
     Promise.all(promises).then(values => res.render('admin/createproduct', {
