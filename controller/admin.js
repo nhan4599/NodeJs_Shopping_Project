@@ -67,19 +67,19 @@ router.get('/listcustomers', (req, res) => {
 });
 
 router.get('/approve', async (req,res)=>{
-    var id = req.body.id;
+    var id = req.query.id;
     var result = await db.Approve(id);
     res.redirect('/admin/listorders');
 });
 
 router.get('/completed', async (req,res)=>{
-    var id = req.body.id;
+    var id = req.query.id;
     var result = await db.Complete(id);
     res.redirect('/admin/listorders');
 });
 
 router.get('/cancel', async (req,res)=>{
-    var id = req.body.id;
+    var id = req.query.id;
     var result = await db.Cancel(id);
     res.redirect('/admin/listorders');
 });
