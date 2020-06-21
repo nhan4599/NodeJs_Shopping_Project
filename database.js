@@ -1,7 +1,8 @@
 var sql = require('mssql');
 
 var constant = require('./constant');
-var crypt = require('crypto');
+
+var crypt = require('./cryptutils');
 
 var pool = new sql.ConnectionPool(constant.dbConfig);
 
@@ -20,9 +21,8 @@ module.exports.GetThumbnailImageList = async (products) => {
     return list;
 };
 
-module.exports.AdminLogin = async (username, password) => {
+module.exports.AdminLogin = async (username, hash) => {
     try {
-        var hash = crypt.createHash('md5').update(password).digest('hex');
         var conn = await pool.connect();
         var user = await conn.query(`select * from Admin where username = '${username}' and hash = '${hash}'`);
         return user;
@@ -68,7 +68,7 @@ module.exports.GetProductDetail = async (id) => {
     var conn = await pool.connect();
     var result = await conn.query(`select Product.productId, Product.productName, Product.inventory, Product.price, Category.cateName, ProductState.stateName, Segment.segmentName, Manufacturer.manuName from Product, ProductState, Segment, Manufacturer, Category where Product.cateId = Category.cateId and Product.stateId = ProductState.stateId and Product.segmentId = Segment.segmentId and Product.manuId = Manufacturer.manuId and Product.productId = ${id}`);
     result.recordset[0].config = await GetProductConfig(conn, id);
-    result.recordset[0].images = await GetProductImage(conn, id);
+    result.recordset[0].images = await GetProductImages(conn, id);
     return result.recordset[0];
 };
 
@@ -97,14 +97,56 @@ module.exports.InsertCategory = async (cateName) => {
     return result.rowsAffected > 0 ? true : false;
 };
 
+module.exports.GetProductListByCateId_Customer = async (cateId) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`select * from Product where cateId = ${cateId}`);
+    for (var i = 0; i < result.recordset.length; i++) {
+        result.recordset[i].image = (await GetProductImages(conn, result.recordset[i].productId))[0].imgBase64;
+    }
+    return result.recordset;
+};
+
+module.exports.GetProductList_Customer = async () => {
+    var conn = await pool.connect();
+    var result = await conn.query('select * from Product');
+    for (var i = 0; i < result.recordset.length; i++) {
+        result.recordset[i].image = (await GetProductImages(conn, result.recordset[i].productId))[0].imgBase64;
+    }
+    return result.recordset;
+};
+
+module.exports.SignUp = async (user, hash, email, phone) => {
+    var conn = await pool.connect();
+    await conn.query(`insert into Customer(username, hash, isActivated, email, phoneNumber) values('${user}', '${hash}', 0, '${email}', '${phone}')`);
+    return (await conn.query('select @@IDENTITY as temp')).recordset[0].temp;
+};
+
+module.exports.ActivateUser = async id => {
+    var conn = await pool.connect();
+    var result = await conn.query(`update Customer set isActivated = 1 where customerId = ${id}`);
+    return result.rowsAffected[0] === 1 ? true : false;
+};
+
+module.exports.GetCustomerById = async id => {
+    var conn = await pool.connect();
+    var result = await conn.query(`select * from Customer where customerId = ${id}`);
+    return result.recordset[0];
+};
+
+module.exports.CustomerLogin = async (user, hash) => {
+    var conn = await pool.connect();
+    var result = await conn.query(`select * from Customer where username = '${user}' and hash = '${hash}'`);
+    return result.recordset[0];
+};
+
+async function GetProductImages(conn, id) {
+    var result = await conn.query(`select * from Image where productId = ${id}`);
+    return result.recordset;
+}
+
 async function GetProductConfig(conn, id) {
     var result = await conn.query(`select * from Configuration where productId = ${id}`);
     return result.recordset[0];
-}
-
-async function GetProductImage(conn, id) {
-    var result = await conn.query(`select * from Image where productId = ${id}`);
-    return result.recordset;
 }
 
 async function InsertProductConfig(conn, id, config) {

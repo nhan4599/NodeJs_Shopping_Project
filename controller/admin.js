@@ -1,5 +1,6 @@
 var express = require('express');
 var db = require('../database');
+var crypt = require('../cryptutils');
 var multer = require('multer');
 
 var router = express.Router();
@@ -23,7 +24,8 @@ router.get(['/', '/home'], (req, res) => {
 router.post('/login', async (req, res) => {
     var username = req.body.username;
     var pass = req.body.password;
-    var result = await db.AdminLogin(username, pass);
+    var hash = crypt.GetPasswordHash(pass);
+    var result = await db.AdminLogin(username, hash);
     if (result.message) {
         res.render('admin/login', { message: 'Unexpected error' });
     }
