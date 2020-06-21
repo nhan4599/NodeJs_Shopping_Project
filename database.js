@@ -206,12 +206,26 @@ async function InsertProductImage(conn, id, images) {
     return await conn.query(queryString);
 }
 
-async function UpdateProductConfig(conn, id, config) {
-    var result = await conn.query(`update Configuration set RAM = ${config.ram}, screen = '${config.screen}', rearCamera = '${config.rearCam}', frontCamera = '${config.frontCam}', OS = '${config.os}', storage = ${config.storage}, SDtype = '${config.sdType}', maxSDsize = ${config.sdSize}, batery = ${config.pin} where productId = ${id}`);
-    return result;
-}
+module.exports.GetAllCustomer = async () => {
+    var conn = await pool.connect();
+    var result = await conn.query('select * from Customer');
+    return result.recordset;
+};
 
-async function UpdateProductImages(conn, id, images) {
-    await conn.query(`delete Image where productId = ${id}`);
-    return await InsertProductImage(conn, id, images);
-}
+module.exports.GetActiveCustomer = async () => {
+    var conn = await pool.connect();
+    var result = await conn.query('select isActivated from Customer');
+    return result.recordset;
+};
+
+module.exports.DeactiveAccount = async id => {
+    var conn = await pool.connect();
+    var rs = await conn.query(`update Customer set isActivated = 0 where customerId =${id}`);
+    return rs.rowsAffected[0] == 1 ? true:false
+};
+
+module.exports.resetPassword = async id => {
+    var conn = await pool.connect();
+    var rs = await conn.query(`update Customer set hash = '827ccb0eea8a706c4c34a16891f84e7b' where customerId =${id}`);
+    return rs.rowsAffected[0] == 1 ? true:false
+};
