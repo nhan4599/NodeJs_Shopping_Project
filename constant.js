@@ -8,5 +8,12 @@ module.exports = {
             enableArithAbort: true
         }
     },
+    mailConfig: {
+        service: 'gmail',
+        auth: {
+            user: 'nhan0385790927@gmail.com',
+            pass: 'nhan4599'
+        }
+    },
     pageSize: 10
 };
