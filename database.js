@@ -7,6 +7,9 @@ var pool = new sql.ConnectionPool(constant.dbConfig);
 module.exports.GetProductList = async () => {
     var conn = await pool.connect();
     var list = await conn.query('select Product.productId, Product.productName, Product.inventory, Product.price, Category.cateName, ProductState.stateName, Segment.segmentName, Manufacturer.manuName from Product, ProductState, Segment, Manufacturer, Category where Product.cateId = Category.cateId and Product.stateId = ProductState.stateId and Product.segmentId = Segment.segmentId and Product.manuId = Manufacturer.manuId');
+    for (var i = 0; i < list.recordset.length; i++) {
+        list.recordset[i].config = (await conn.query(`select * from Configuration where productId = ${list.recordset[i].productId}`)).recordset[0];
+    }
     return list.recordset;
 };
 

@@ -103,7 +103,7 @@ router.post('/editManufacturer', async (req, res) => {
 router.get('/listorders', async (req, res) => {
     var id = req.body.id;
     var Bill = await db.GetBill(id);
-    res.render('admin/listorders', { Bill });
+    res.render('admin/listorders', { Bill: Bill.reverse() });
 });
 
 router.get('/listcustomers', async (req, res) => {
