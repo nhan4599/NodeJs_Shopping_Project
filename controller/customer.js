@@ -208,7 +208,7 @@ router.post('/checkout', async (req, res) => {
 
 router.get('/myorders', async (req, res) => {
     var categories = await db.GetCategoryList();
-    var bills = await db.GetBillsByCustId(req.session.customer.customerId);
+    var bills = await (await db.GetBillsByCustId(req.session.customer.customerId)).reverse();
     var items = null;
     if (req.query.id) {
         items = await db.GetBillItem(req.query.id);

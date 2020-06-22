@@ -257,7 +257,7 @@
                                 <tr class="rowOnClick" style="color: black; cursor: pointer;">
                                     <td style="display: none;"><%= bill.billId %></td>
                                     <td><%= (i + 1) %></td>
-                                    <td id="time"><%= bill.createdDate %></td>
+                                    <td class="time"><%= bill.createdDate %></td>
                                     <td><%= bill.stateName %></td>
                                 </tr>
                                 <% } %>
@@ -297,7 +297,7 @@
                                 <tr class="rowOnClick" style="color: black;">
                                     <td style="display: none;"><%= bill.billId %></td>
                                     <td><%= (i + 1) %></td>
-                                    <td id="time"><%= bill.createdDate %></td>
+                                    <td class="time"><%= bill.createdDate %></td>
                                     <td><%= bill.stateName %></td>
                                 </tr>
                                 <% } %>
@@ -361,7 +361,7 @@
                 $('<form style="display: none" action="/checkout" method="post"></form>').appendTo('body').submit();
             });
 
-            $('#time').each((index, elem) => {
+            $('.time').each((index, elem) => {
                 var curr = $(elem).html();
                 var formated = moment(curr).format('hh:mm:ss DD/MM/YYYY');
                 $(elem).html(formated);
