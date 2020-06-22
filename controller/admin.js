@@ -1,5 +1,6 @@
 var express = require('express');
 var db = require('../database');
+var constant = require('../constant');
 var crypt = require('../cryptutils');
 var multer = require('multer');
 
@@ -45,9 +46,12 @@ router.post('/logout', (req, res) => {
 });
 
 router.get('/listproducts', async (req, res) => {
+    var page = parseInt(req.query.page || 1);
+    var offset = (page - 1) * constant.pageSize;
     var list = await db.GetProductList();
+    var maxPage = list.length / constant.pageSize;
     var imageList = await db.GetThumbnailImageList(list);
-    res.render('admin/listproducts', { products: list, images: imageList });
+    res.render('admin/listproducts', { products: list.slice(offset, (page * constant.pageSize) - 1), images: imageList.slice(offset, (page * constant.pageSize) - 1), maxPage, page });
 });
 
 router.get('/listcategories', async (req, res) => {

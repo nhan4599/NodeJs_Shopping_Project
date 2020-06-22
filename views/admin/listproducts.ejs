@@ -109,7 +109,8 @@
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>Products list</h2>
-                                    <a class="btn btn-primary pull-right" style="color: #E7E7E7;" href="/admin/createproduct">Add new product</a>
+                                    <a class="btn btn-primary pull-right" style="color: #E7E7E7;"
+                                        href="/admin/createproduct">Add new product</a>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
@@ -141,24 +142,26 @@
 
                                             <tbody>
                                                 <% for (var i = 0; i < products.length; i++) { %>
-                                                    <tr class="even pointer">
-                                                        <td class="a-center ">
-                                                            <input type="checkbox" class="flat" name="table_records">
-                                                        </td>
-                                                        <td><%= products[i].productName %></td>
-                                                        <td>
-                                                            <img src="data:image/png;base64,<%= images[i] %>" alt="Error!" width="150px">
-                                                        </td>
-                                                        <td><%= products[i].inventory %></td>
-                                                        <td><%= products[i].price %></td>
-                                                        <td><%= products[i].cateName %></td>
-                                                        <td class="a-right"><%= products[i].segmentName %></td>
-                                                        <td class="a-right"><%= products[i].manuName %></td>
-                                                        <td class="a-right"><%= products[i].stateName %></td>
-                                                        <td class="last">
-                                                            <a href="/admin/productdetail/<%= products[i].productId %>">View</a>
-                                                        </td>
-                                                    </tr>
+                                                <tr class="even pointer">
+                                                    <td class="a-center ">
+                                                        <input type="checkbox" class="flat" name="table_records">
+                                                    </td>
+                                                    <td><%= products[i].productName %></td>
+                                                    <td>
+                                                        <img src="data:image/png;base64,<%= images[i] %>" alt="Error!"
+                                                            width="150px">
+                                                    </td>
+                                                    <td><%= products[i].inventory %></td>
+                                                    <td><%= products[i].price %></td>
+                                                    <td><%= products[i].cateName %></td>
+                                                    <td class="a-right"><%= products[i].segmentName %></td>
+                                                    <td class="a-right"><%= products[i].manuName %></td>
+                                                    <td class="a-right"><%= products[i].stateName %></td>
+                                                    <td class="last">
+                                                        <a
+                                                            href="/admin/productdetail/<%= products[i].productId %>">View</a>
+                                                    </td>
+                                                </tr>
                                                 <% } %>
                                             </tbody>
                                         </table>
@@ -167,10 +170,13 @@
                                 <div class="clearfix"></div>
                                 <div class="row">
                                     <ul class="pagination mx-auto">
-                                        <li class="active page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                        <% for (var i = 0; i < maxPage; i++) { %>
+                                            <% if (i + 1 == page) { %>
+                                                <li class="active page-item"><a class="page-link" href="/listproducts?page=<%= (i + 1) %>"><%= (i + 1) %></a></li>
+                                            <% } else { %>
+                                                <li class="page-item"><a class="page-link" href="/listproducts?page=<%= (i + 1) %>"><%= (i + 1) %></a></li>
+                                            <% } %>
+                                        <% } %>
                                     </ul>
                                 </div>
                             </div>
