@@ -193,6 +193,10 @@ router.get('/checkout', async (req, res) => {
 });
 
 router.post('/checkout', async (req, res) => {
+    if (!req.session.customer) {
+        res.redirect('/login');
+        res.end();
+    }
     var result = await db.InsertBill(req.session.customer.customerId, req.session.cart);
     if (result) {
         delete req.session.cart;
