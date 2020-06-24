@@ -13,7 +13,12 @@ module.exports = {
         auth: {
             user: 'nhan0385790927@gmail.com',
             pass: 'nhan4599'
+        },
+        secure: false,
+        tls: {
+            rejectUnauthorized: false
         }
     },
-    pageSize: 10
+    pageSize: 10,
+    releaseUrl: 'https://vast-shore-03767.herokuapp.com'
 };

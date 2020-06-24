@@ -1,7 +1,9 @@
 var express = require('express');
 var db = require('../database');
+var moment = require('moment');
 var mailsender = require('../mailsender');
 var crypt = require('../cryptutils');
+const constant = require('../constant');
 
 var router = express.Router();
 
@@ -79,12 +81,19 @@ router.get('/resendmail', async (req, res) => {
 router.get('/activate', async (req, res) => {
     var url = decodeURIComponent(req.query.token);
     var data = crypt.DecryptData(url).split(',');
-    var id = data[0];
-    var result = await db.ActivateUser(id);
-    if (result) {
-        res.redirect('/login');
+    var timeInMiliseconds = parseInt(data[1]);
+    var initialTime = moment(timeInMiliseconds);
+    var expiredTime = moment(timeInMiliseconds).add(1, 'hour');
+    var currentTime = moment();
+    if (currentTime.isBetween(initialTime, expiredTime, null, "()")) {
+        var result = await db.ActivateUser(data[0]);
+        if (result) {
+            res.redirect('/login');
+        } else {
+            res.send('Something went wrong. Try it later');
+        }
     } else {
-        res.status(404).send(`Something went wrong, try to send new active email by click this link: <a href="https://vast-shore-03767.herokuapp.com/resendmail?id=${id}">Resend activate email</a>`);
+        res.status(404).send(`This token has been expired, try to send new active email by click this link: <a href="${constant.releaseUrl}/resendmail?id=${id}">Resend activate email</a>`);
     }
 });
 
@@ -214,7 +223,6 @@ router.get('/myorders', async (req, res) => {
         items = await db.GetBillItem(req.query.id);
     }
     res.render('myorders', { categories, bills, items });
-
 });
 
 function validateEmail(email) {
