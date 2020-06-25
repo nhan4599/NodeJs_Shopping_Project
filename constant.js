@@ -20,5 +20,7 @@ module.exports = {
         }
     },
     pageSize: 10,
-    releaseUrl: 'https://vast-shore-03767.herokuapp.com'
+    releaseUrl: 'https://vast-shore-03767.herokuapp.com',
+    cacheTimeout: 10,
+    tokenTimeout: 1
 };

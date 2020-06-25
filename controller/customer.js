@@ -7,25 +7,35 @@ const constant = require('../constant');
 
 var router = express.Router();
 
+router.use(['/', '/home', 'products'], (req, res, next) => {
+    if (req.session.cache) {
+        if (isTimedOut(req.session.cache.createdTime, constant.cacheTimeout, 'minute'))
+            delete req.session.cache;
+    }
+    next();
+});
+
 router.get(['/', '/home'], async (req, res) => {
-    var promises = [db.GetProductList_Customer(), db.GetCategoryList()];
-    var values = await Promise.all(promises);
-    res.render('home', { products: values[0].slice(0, 8), categories: values[1] });
+    if (!req.session.cache) {
+        var promises = [db.GetProductList_Customer(), db.GetCategoryList()];
+        var values = await Promise.all(promises);
+        req.session.cache = { products: values[0], categories: values[1], createdTime: new Date().getTime() };
+    }
+    res.render('home', { products: req.session.cache.products.slice(0, 8), categories: req.session.cache.categories });
 });
 
 router.get('/products', async (req, res) => {
-    var suitablePromise = null;
+    if (!req.session.cache) {
+        var promises = [db.GetProductList_Customer(), db.GetCategoryList()];
+        var values = await Promise.all(promises);
+        req.session.cache = { products: values[0], categories: values[1], createdTime: new Date().getTime() };
+    }
     if (req.query.cateId) {
-        suitablePromise = db.GetProductListByCateId_Customer(parseInt(req.query.cateId.toString()));
-    } else {
-        suitablePromise = db.GetProductList_Customer();
+        req.session.cache.products = await db.GetProductListByCateId_Customer(parseInt(req.query.cateId.toString()));
+    } else if (req.query.keyword) {
+        req.session.cache.products = req.session.cache.products.filter(item => item.productName.toLowerCase().search(req.query.keyword.toString().toLowerCase()) != -1);
     }
-    var promises = [suitablePromise, db.GetCategoryList()];
-    var values = await Promise.all(promises);
-    if (req.query.keyword) {
-        values[0] = values[0].filter(item => item.productName.toLowerCase().search(req.query.keyword.toString().toLowerCase()) != -1);
-    }
-    res.render('products', { products: values[0], categories: values[1] });
+    res.render('products', { products: req.session.cache.products, categories: req.session.cache.categories });
 });
 
 router.get('/productdetail', async (req, res) => {
@@ -81,11 +91,7 @@ router.get('/resendmail', async (req, res) => {
 router.get('/activate', async (req, res) => {
     var url = decodeURIComponent(req.query.token);
     var data = crypt.DecryptData(url).split(',');
-    var timeInMiliseconds = parseInt(data[1]);
-    var initialTime = moment(timeInMiliseconds);
-    var expiredTime = moment(timeInMiliseconds).add(1, 'hour');
-    var currentTime = moment();
-    if (currentTime.isBetween(initialTime, expiredTime, null, "()")) {
+    if (isTimedOut(data[1], constant.tokenTimeout, 'hour')) {
         var result = await db.ActivateUser(data[0]);
         if (result) {
             res.redirect('/login');
@@ -177,11 +183,7 @@ router.post('/clearcart', (req, res) => {
 router.post('/remove', (req, res) => {
     var index = req.session.cart.findIndex(item => item.productId == req.body.id);
     if (index != -1) {
-        if (index == 0) {
-            req.session.cart.shift();
-        } else {
-            req.session.cart.splice(index, 1);
-        }
+        req.session.cart.splice(index, 1);
         res.send({ status: 4, message: 'delete item from cart complete successfully' });
     } else {
         res.send({ status: 0, message: 'delete failed' });
@@ -217,7 +219,7 @@ router.post('/checkout', async (req, res) => {
 
 router.get('/myorders', async (req, res) => {
     var categories = await db.GetCategoryList();
-    var bills = await (await db.GetBillsByCustId(req.session.customer.customerId)).reverse();
+    var bills = (await db.GetBillsByCustId(req.session.customer.customerId)).reverse();
     var items = null;
     if (req.query.id) {
         items = await db.GetBillItem(req.query.id);
@@ -233,6 +235,17 @@ function validateEmail(email) {
 function validatePhone(phone) {
     const re = /0\d{9}/;
     return re.test(String(phone).toLowerCase());
+}
+
+function isTimedOut(timeInMiliseconds, ttl, unitOfMeasure) {
+    timeInMiliseconds = parseInt(timeInMiliseconds.toString());
+    var initialTime = moment(timeInMiliseconds);
+    var expiredTime = initialTime.clone().add(ttl, unitOfMeasure);
+    var currentTime = moment();
+    if (!timeInMiliseconds) {
+        return false;
+    }
+    return !currentTime.isBetween(initialTime, expiredTime, null, '()');
 }
 
 module.exports = router;
