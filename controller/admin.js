@@ -48,10 +48,11 @@ router.post('/logout', (req, res) => {
 router.get('/listproducts', async (req, res) => {
     var page = parseInt(req.query.page || 1);
     var offset = (page - 1) * constant.pageSize;
+    var endOffset = (page * constant.pageSize) - 1;
     var list = (await db.GetProductList()).reverse();
-    var maxPage = list.length / constant.pageSize;
+    var maxPage = parseInt(list.length / constant.pageSize) + 1;
     var imageList = await db.GetThumbnailImageList(list);
-    res.render('admin/listproducts', { products: list.slice(offset, (page * constant.pageSize) - 1), images: imageList.slice(offset, (page * constant.pageSize) - 1), maxPage, page });
+    res.render('admin/listproducts', { products: list.slice(offset, endOffset), images: imageList.slice(offset, (page * constant.pageSize) - 1), maxPage, page });
 });
 
 router.get('/listcategories', async (req, res) => {

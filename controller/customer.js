@@ -25,6 +25,7 @@ router.get(['/', '/home'], async (req, res) => {
 });
 
 router.get('/products', async (req, res) => {
+    var originalUrl = '/products?';
     if (!req.session.cache) {
         var promises = [db.GetProductList_Customer(), db.GetCategoryList()];
         var values = await Promise.all(promises);
@@ -32,10 +33,16 @@ router.get('/products', async (req, res) => {
     }
     if (req.query.cateId) {
         req.session.cache.products = await db.GetProductListByCateId_Customer(parseInt(req.query.cateId.toString()));
+        originalUrl = `/products?cateId=${req.query.cateId}`;
     } else if (req.query.keyword) {
         req.session.cache.products = req.session.cache.products.filter(item => item.productName.toLowerCase().search(req.query.keyword.toString().toLowerCase()) != -1);
+        originalUrl = `/products?keyword=${req.query.keyword}`;
     }
-    res.render('products', { products: req.session.cache.products, categories: req.session.cache.categories });
+    var page = req.query.page || 1;
+    var offset = (page - 1) * constant.pageSize;
+    var endOffset = (page * constant.pageSize) - 1;
+    var maxPage = parseInt(req.session.cache.products.length / constant.pageSize) + 1;
+    res.render('products', { products: req.session.cache.products.slice(offset, endOffset), categories: req.session.cache.categories, maxPage, page, originalUrl });
 });
 
 router.get('/productdetail', async (req, res) => {

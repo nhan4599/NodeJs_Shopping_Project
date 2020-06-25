@@ -170,11 +170,11 @@
                                 <div class="clearfix"></div>
                                 <div class="row">
                                     <ul class="pagination mx-auto">
-                                        <% for (var i = 0; i < maxPage; i++) { %>
-                                            <% if (i + 1 == page) { %>
-                                                <li class="active page-item"><a class="page-link" href="/listproducts?page=<%= (i + 1) %>"><%= (i + 1) %></a></li>
+                                        <% for (var i = 1; i <= maxPage; i++) { %>
+                                            <% if (i == page) { %>
+                                                <li class="active page-item"><a class="page-link" href="/listproducts?page=<%= i %>"><%= i %></a></li>
                                             <% } else { %>
-                                                <li class="page-item"><a class="page-link" href="/listproducts?page=<%= (i + 1) %>"><%= (i + 1) %></a></li>
+                                                <li class="page-item"><a class="page-link" href="/listproducts?page=<%= i %>"><%= i %></a></li>
                                             <% } %>
                                         <% } %>
                                     </ul>
