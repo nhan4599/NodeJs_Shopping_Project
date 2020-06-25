@@ -372,10 +372,9 @@
 									<div class="product_title">
 										<a href="/productdetail?id=<%= product.productId %>"
 											id="linkCart"><%= product.productName %></a>
-										<a class="pull-right btn btnCart"
-											style="cursor: pointer; color: white; background: gray;">Add to cart</a>
 									</div>
 									<div class="product_price">$<%= product.price %></div>
+									<a class="btn btn-secondary btnCart" style="margin-top: 7.5px; color: white; cursor: pointer;">Add to cart</a>
 								</div>
 							</div>
 							<% } %>
@@ -528,11 +527,12 @@
 	<script src="/assets/plugins/easing/easing.js"></script>
 	<script src="/assets/plugins/parallax-js-master/parallax.min.js"></script>
 	<script src="/assets/js/custom.js"></script>
+    <script src="/assets/js/cart.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script>
 		$(document).ready(function () {
 			$('.btnCart').click(function () {
-				var link = $(this).parent().children('#linkCart').attr('href');
+				var link = $(this).parent().children('.product_title').children('#linkCart').attr('href');
 				var id = link.substring(link.lastIndexOf('?id=') + 4);
 				console.log(id);
 				$.ajax({
